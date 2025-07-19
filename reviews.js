@@ -1716,21 +1716,34 @@ const reviewsDatabase = {
         '“He\'s more myself than I am. Whatever our souls are made of, his and mine are the same.”'
     ]
 },
-'zero_to_one': {
-    title: 'Zero to One: Notes on Startups, or How to Build the Future',
-    author: 'Peter Thiel',
-    summary: 'This book, based on a class taught by PayPal co-founder Peter Thiel at Stanford, is a guide to thinking about innovation and building successful startups. Thiel argues that true progress comes not from competing in existing markets (going from 1 to n), but from creating something entirely new (going from 0 to 1). He contends that the most successful businesses are monopolies that have created a unique product or technology that is far superior to any alternative. The book is a collection of contrarian and thought-provoking ideas on technology, competition, and the future.',
-    pros: [
-        'It offers a unique and highly influential perspective on entrepreneurship that challenges much of the conventional wisdom taught in business schools.',
-        'The book is concise, filled with provocative ideas, and encourages readers to think for themselves about how to build the future.'
-    ],
-    cons: [
-        'The advice is highly abstract and philosophical, and it is less a practical "how-to" guide and more a collection of principles for thinking about innovation.',
-        'Thiel\'s unabashed advocacy for monopolies and his libertarian political views can be controversial and may not sit well with all readers.'
-    ],
-    quotes: [
-        '“The next Bill Gates will not build an operating system. The next Larry Page or Sergey Brin won’t make a search engine. If you are copying these guys, you aren’t learning from them.”',
-        '“Competition is for losers.”'
-    ]
-}
-};
+// ... lots of other books above ...
+
+    'zero_to_one': {
+        title: 'Zero to One: Notes on Startups, or How to Build the Future',
+        author: 'Peter Thiel',
+        summary: '...',
+        pros: ['...', '...'],
+        cons: ['...', '...'],
+        quotes: ['...', '...']
+    }, // <-- IMPORTANT: Add a comma here!
+
+    // PASTE THE NEW BOOK CODE HERE:
+    'the_alchemist': {
+        title: 'The Alchemist',
+        author: 'Paulo Coelho',
+        summary: 'This allegorical novel tells the mystical story of Santiago, an Andalusian shepherd boy who yearns to travel in search of a worldly treasure. His quest, however, leads him to riches of a different kind, teaching him about the importance of listening to his heart, recognizing omens, and following his "Personal Legend." It is a profound and inspirational journey about the transformative power of following one\'s dreams and the wisdom gained along the way.',
+        pros: [
+            'Its simple, symbolic, and poetic language makes profound philosophical ideas about destiny and purpose incredibly accessible to a wide audience.',
+            'The story serves as a powerful and uplifting allegory for following one\'s dreams, providing motivation and a sense of wonder to readers at any stage of life.'
+        ],
+        cons: [
+            'Critics argue the plot is overly simplistic and that the philosophy can feel like a collection of inspirational platitudes without deep intellectual rigor.',
+            'The repetitive nature of the core message—"follow your dream and the universe will conspire"—may not resonate with more cynical or pragmatic readers.'
+        ],
+        quotes: [
+            '“And, when you want something, all the universe conspires in helping you to achieve it.”',
+            '“It\'s the possibility of having a dream come true that makes life interesting.”'
+        ]
+    } // <-- NO comma here since it is now the last book
+
+}; // This is the final closing brace and semicolon of the whole database
