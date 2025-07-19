@@ -141,14 +141,14 @@
         </div>
     </section>
 
-    <section id="ai-review" class="bg-gray-100 py-20 px-6">
-        <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-serif text-maroon mb-4">Curated Book Insights</h2>
-            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Select a book from this curated library to read a detailed, AI-generated analysis of its summary, strengths, weaknesses, and most famous quotes.</p>
+<section id="ai-review" class="bg-gray-100 py-20 px-6">
+    <div class="container mx-auto text-center">
+        <h2 class="text-4xl font-serif text-maroon mb-4">Curated & Live Book Insights</h2>
+        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Select a book from our curated library, or use the live AI search to get an instant review for any book in the world.</p>
 
-            <div class="max-w-xl mx-auto">
-                <select id="book-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
-                    <option value="">-- Select a Book --</option>
+        <div class="max-w-xl mx-auto mb-10">
+            <h3 class="text-2xl font-serif text-bronze mb-4">Curated Library</h3>
+            <select id="book-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
                     <option value="100_startup">The $100 Startup</option>
                     <option value="1984">1984</option>
                     <option value="a_man_without_a_country">A Man Without a Country</option>
@@ -254,10 +254,18 @@
                 </select>
             </div>
 
-            <div id="review-output" class="mt-8 text-left max-w-3xl mx-auto">
-                </div>
+           <div class="max-w-xl mx-auto">
+            <h3 class="text-2xl font-serif text-bronze mb-4">Live AI Search</h3>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <input id="live-search-input" type="text" placeholder="e.g., 'The Hobbit' by J.R.R. Tolkien" class="flex-grow px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                <button id="live-search-button" class="bg-maroon text-white font-bold py-3 px-6 rounded-md hover:bg-opacity-90 transition transform hover:scale-105">Search</button>
+            </div>
         </div>
-    </section>
+
+        <div id="review-output" class="mt-8 text-left max-w-3xl mx-auto">
+            </div>
+    </div>
+</section>
 
     <section id="community" class="py-20 px-6">
         <div class="container mx-auto text-center">
