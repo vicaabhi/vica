@@ -280,66 +280,96 @@
         </div>
     </footer>
 
-    <script src="reviews.js"></script>
     <script>
-        document.getElementById('mobile-menu-button').onclick = function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        };
+    // This is the updated script for index.html
 
-        document.getElementById('book-select').addEventListener('change', function() {
-            const selectedBookKey = this.value;
-            const outputDiv = document.getElementById('review-output');
-            
-            if (!selectedBookKey) {
-                outputDiv.innerHTML = ''; 
-                return;
-            }
+    document.getElementById('mobile-menu-button').onclick = function() {
+        document.getElementById('mobile-menu').classList.toggle('hidden');
+    };
 
-            const review = reviewsDatabase[selectedBookKey];
-            
-            if (!review) { 
-                outputDiv.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500 font-semibold">Error: Review data not found. Please check the database.</p></div>';
-                return;
-            }
+    const outputDiv = document.getElementById('review-output');
 
-            let reviewHTML = `
-                <div class="bg-white p-8 rounded-lg shadow-lg" style="animation: fadeIn 0.5s ease-in-out;">
-                    <h3 class="text-2xl font-bold text-maroon mb-1">${review.title}</h3>
-                    <p class="text-md text-gray-500 mb-6 font-semibold">by ${review.author}</p>
-                    
-                    <div class="space-y-8">
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Summary</h4>
-                            <p class="mt-2 text-gray-700 leading-relaxed">${review.summary}</p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Pros</h4>
-                            <ul class="mt-2 space-y-3">
-                                ${review.pros.map(pro => `<li class="flex items-start"><span class="text-green-500 mr-3 mt-1">&#10003;</span><span class="text-gray-700">${pro}</span></li>`).join('')}
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Cons</h4>
-                            <ul class="mt-2 space-y-3">
-                                ${review.cons.map(con => `<li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10007;</span><span class="text-gray-700">${con}</span></li>`).join('')}
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Famous Quotes</h4>
-                            <div class="mt-3 space-y-4">
-                                ${review.quotes.map(quote => `<blockquote class="border-l-4 border-bronze/50 pl-4 italic text-gray-600">"${quote}"</blockquote>`).join('')}
-                            </div>
-                        </div>
-                        <div class="text-center pt-4">
-                            <a href="https://www.amazon.in/s?k=${encodeURIComponent(review.title + ' ' + review.author)}" target="_blank" class="inline-block bg-maroon text-white px-6 py-3 rounded-full font-bold hover:bg-opacity-90 transition text-lg">View on Amazon</a>
+    // --- Function to display review data ---
+    function displayReview(review) {
+        let reviewHTML = `
+            <div class="bg-white p-8 rounded-lg shadow-lg" style="animation: fadeIn 0.5s ease-in-out;">
+                <h3 class="text-2xl font-bold text-maroon mb-1">${review.title}</h3>
+                <p class="text-md text-gray-500 mb-6 font-semibold">by ${review.author}</p>
+                <div class="space-y-8">
+                    <div>
+                        <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Summary</h4>
+                        <p class="mt-2 text-gray-700 leading-relaxed">${review.summary}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Pros</h4>
+                        <ul class="mt-2 space-y-3">
+                            ${review.pros.map(pro => `<li class="flex items-start"><span class="text-green-500 mr-3 mt-1">&#10003;</span><span class="text-gray-700">${pro}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Cons</h4>
+                        <ul class="mt-2 space-y-3">
+                            ${review.cons.map(con => `<li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10007;</span><span class="text-gray-700">${con}</span></li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Famous Quotes</h4>
+                        <div class="mt-3 space-y-4">
+                            ${review.quotes.map(quote => `<blockquote class="border-l-4 border-bronze/50 pl-4 italic text-gray-600">"${quote}"</blockquote>`).join('')}
                         </div>
                     </div>
+                    <div class="text-center pt-4">
+                        <a href="https://www.amazon.in/s?k=${encodeURIComponent(review.title + ' ' + review.author)}" target="_blank" class="inline-block bg-maroon text-white px-6 py-3 rounded-full font-bold hover:bg-opacity-90 transition text-lg">View on Amazon</a>
+                    </div>
                 </div>
-                <style> @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } </style>
-            `;
-            
-            outputDiv.innerHTML = reviewHTML;
-        });
-    </script>
+            </div>
+            <style> @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } </style>
+        `;
+        outputDiv.innerHTML = reviewHTML;
+    }
+    
+    // --- Logic for the curated dropdown ---
+    document.getElementById('book-select').addEventListener('change', function() {
+        const selectedBookKey = this.value;
+        if (!selectedBookKey) {
+            outputDiv.innerHTML = ''; 
+            return;
+        }
+        const review = reviewsDatabase[selectedBookKey];
+        if (review) {
+            displayReview(review);
+        }
+    });
+
+    // --- Logic for the new LIVE search bar ---
+    document.getElementById('live-search-button').addEventListener('click', async function() {
+        const bookTitle = document.getElementById('live-search-input').value;
+        if (!bookTitle) {
+            outputDiv.innerHTML = '<p class="text-center text-red-500">Please enter a book title to search.</p>';
+            return;
+        }
+
+        outputDiv.innerHTML = '<p class="text-center text-lg">Searching the AI... please wait.</p>';
+
+        try {
+            const response = await fetch('/.netlify/functions/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bookTitle: bookTitle })
+            });
+
+            if (!response.ok) {
+                throw new Error('The AI is currently busy. Please try again in a moment.');
+            }
+
+            const reviewData = await response.json();
+            displayReview(reviewData);
+
+        } catch (error) {
+            console.error('Error:', error);
+            outputDiv.innerHTML = `<p class="text-center text-red-500">${error.message}</p>`;
+        }
+    });
+</script>
 </body>
 </html>
