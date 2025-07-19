@@ -309,41 +309,11 @@
         const chatSubmitButton = document.getElementById('chat-submit-button');
         
         let currentBookTitle = '';
-        let chatHistory = []; // NEW: Array to store the conversation history
+        let chatHistory = []; 
 
-        // When a user selects a book from the dropdown
-        bookSelect.addEventListener('change', function() {
-            const selectedBookKey = this.value;
-            // Hide the static review div if you have one
-            document.getElementById('review-output').innerHTML = '';
-
-            if (!selectedBookKey) {
-                chatContainer.classList.add('hidden');
-                return;
-            }
-            
-            const book = reviewsDatabase[selectedBookKey];
-            if (book) {
-                currentBookTitle = book.title;
-                chatBookTitle.textContent = currentBookTitle;
-                
-                // Reset chat and history, then show the interface
-                chatHistory = []; // NEW: Reset history for a new book
-                chatMessages.innerHTML = `
-                    <div class="p-3 bg-cream rounded-lg max-w-lg">
-                        <p class="text-sm font-bold text-maroon">AI Mentor</p>
-                        <p>Hello! I have deep knowledge of "${currentBookTitle}". What would you like to know?</p>
-                    </div>
-                `;
-                chatContainer.classList.remove('hidden');
-            }
-        });
-
-        // When a user submits a question in the chat
-        chatForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const userQuestion = chatInput.value.trim();
-            if (!userQuestion || !currentBookTitle) return;
+        // --- NEW: Function to handle sending a message (used by form and buttons) ---
+        async function sendMessage(userQuestion) {
+             if (!userQuestion || !currentBookTitle) return;
 
             // 1. Add user's message to history and display it
             chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
@@ -370,14 +340,11 @@
                     body: JSON.stringify({ 
                         bookTitle: currentBookTitle,
                         question: userQuestion,
-                        history: chatHistory.slice(0, -1) // Send history *before* the new question
+                        history: chatHistory.slice(0, -1)
                     })
                 });
 
-                if (!response.ok) {
-                    throw new Error('The AI is currently busy. Please try again.');
-                }
-
+                if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
                 const data = await response.json();
                 
                 // 4. Add AI's response to history and display it
@@ -385,7 +352,6 @@
                 thinkingDiv.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${data.answer}</p></div>`;
 
             } catch (error) {
-                // If there's an error, remove the last user message from history to allow a retry
                 chatHistory.pop(); 
                 thinkingDiv.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>${error.message}</p></div>`;
             } finally {
@@ -393,6 +359,76 @@
                 chatSubmitButton.disabled = false;
                 chatInput.focus();
             }
+        }
+
+
+        // --- When a user selects a book from the dropdown ---
+        bookSelect.addEventListener('change', async function() {
+            const selectedBookKey = this.value;
+            document.getElementById('review-output').innerHTML = '';
+
+            if (!selectedBookKey) {
+                chatContainer.classList.add('hidden');
+                return;
+            }
+            
+            const book = reviewsDatabase[selectedBookKey];
+            if (book) {
+                currentBookTitle = book.title;
+                chatBookTitle.textContent = currentBookTitle;
+                
+                // Reset chat and show a loading message
+                chatHistory = [];
+                chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBookTitle}"...</p></div>`;
+                chatContainer.classList.remove('hidden');
+
+                // NEW: Fetch the greeting and starters
+                try {
+                    const response = await fetch('/.netlify/functions/search', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            bookTitle: currentBookTitle,
+                            question: "GET_GREETING_AND_STARTERS" 
+                        })
+                    });
+                    if (!response.ok) throw new Error('Could not load AI Mentor.');
+
+                    const data = await response.json();
+                    
+                    let startersHTML = data.starters.map(starter => 
+                        `<button class="conversation-starter bg-white border border-bronze text-bronze text-sm font-semibold py-1 px-3 rounded-full hover:bg-bronze hover:text-white transition">${starter}</button>`
+                    ).join('');
+
+                    chatMessages.innerHTML = `
+                        <div class="p-3 bg-cream rounded-lg max-w-lg">
+                            <p class="text-sm font-bold text-maroon">AI Mentor</p>
+                            <p>${data.greeting}</p>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                ${startersHTML}
+                            </div>
+                        </div>
+                    `;
+
+                    // Add event listeners to the new starter buttons
+                    document.querySelectorAll('.conversation-starter').forEach(button => {
+                        button.addEventListener('click', function() {
+                            const question = this.textContent;
+                            sendMessage(question);
+                        });
+                    });
+
+                } catch (error) {
+                     chatMessages.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>${error.message}</p></div>`;
+                }
+            }
+        });
+
+        // --- When a user submits a question in the chat ---
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const userQuestion = chatInput.value.trim();
+            sendMessage(userQuestion);
         });
     </script>
 </body>
