@@ -282,144 +282,146 @@
         </div>
     </footer>
 
-  <script src="reviews.js"></script>
-    <script>
-        // --- Mobile Menu Button ---
-        document.getElementById('mobile-menu-button').onclick = function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        };
+ <script src="reviews.js"></script>
+<script>
+    // --- Populating the dropdown from the database ---
+    const bookSelectDropdown = document.getElementById('book-select');
+    const sortedBooks = Object.entries(reviewsDatabase).sort(([,a],[,b]) => a.title.localeCompare(b.title));
 
-        // --- ALL CHAT INTERFACE LOGIC ---
-        const bookSelect = document.getElementById('book-select');
-        const chatContainer = document.getElementById('chat-container');
-        const chatBookTitle = document.getElementById('chat-book-title');
-        const chatMessages = document.getElementById('chat-messages');
-        const chatForm = document.getElementById('chat-form');
-        const chatInput = document.getElementById('chat-input');
-        const chatSubmitButton = document.getElementById('chat-submit-button');
-        
-        let currentBookTitle = '';
-        let chatHistory = []; 
+    for (const [key, book] of sortedBooks) {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = book.title;
+        bookSelectDropdown.appendChild(option);
+    }
 
-        // --- NEW: Function to handle sending a message (used by form and buttons) ---
-        async function sendMessage(userQuestion) {
-             if (!userQuestion || !currentBookTitle) return;
+    // --- ALL CHAT INTERFACE LOGIC ---
+    const chatContainer = document.getElementById('chat-container');
+    const chatBookTitle = document.getElementById('chat-book-title');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatSubmitButton = document.getElementById('chat-submit-button');
+    const characterSelectContainer = document.getElementById('character-select-container');
+    const characterSelect = document.getElementById('character-select');
 
-            // 1. Add user's message to history and display it
-            chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.classList.add('flex', 'justify-end');
-            userMessageDiv.innerHTML = `<div class="p-3 bg-bronze text-white rounded-lg max-w-lg"><p class="text-sm font-bold">You</p><p>${userQuestion}</p></div>`;
-            chatMessages.appendChild(userMessageDiv);
-            chatInput.value = '';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            chatSubmitButton.disabled = true;
+    let currentBookTitle = '';
+    let currentCharacter = 'The Book Itself';
+    let chatHistory = [];
 
-            // 2. Show a thinking indicator
-            const thinkingDiv = document.createElement('div');
-            thinkingDiv.id = 'thinking-indicator';
-            thinkingDiv.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p class="italic">Thinking...</p></div>`;
-            chatMessages.appendChild(thinkingDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    async function apiCall(body) {
+        const response = await fetch('/.netlify/functions/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
+        return response.json();
+    }
 
-            // 3. Call the AI function with the FULL history
-            try {
-                const response = await fetch('/.netlify/functions/search', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        bookTitle: currentBookTitle,
-                        question: userQuestion,
-                        history: chatHistory.slice(0, -1)
-                    })
-                });
+    function addMessage(sender, message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        let content;
+        if (isUser) {
+            messageDiv.classList.add('flex', 'justify-end');
+            content = `<div class="p-3 bg-bronze text-white rounded-lg max-w-lg"><p class="text-sm font-bold">You</p><p>${message}</p></div>`;
+        } else {
+             content = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">${sender}</p><p>${message}</p></div>`;
+        }
+        messageDiv.innerHTML = content;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return messageDiv;
+    }
 
-                if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
-                const data = await response.json();
-                
-                // 4. Add AI's response to history and display it
-                chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
-                thinkingDiv.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${data.answer}</p></div>`;
-
-            } catch (error) {
-                chatHistory.pop(); 
-                thinkingDiv.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>${error.message}</p></div>`;
-            } finally {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                chatSubmitButton.disabled = false;
-                chatInput.focus();
-            }
+    bookSelectDropdown.addEventListener('change', async function() {
+        const selectedBookKey = this.value;
+        if (!selectedBookKey) {
+            chatContainer.classList.add('hidden');
+            return;
         }
 
+        const book = reviewsDatabase[selectedBookKey];
+        if (book) {
+            currentBookTitle = book.title;
+            chatBookTitle.textContent = currentBookTitle;
+            chatHistory = [];
+            characterSelectContainer.classList.add('hidden');
+            chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBookTitle}"...</p></div>`;
+            chatContainer.classList.remove('hidden');
 
-        // --- When a user selects a book from the dropdown ---
-        bookSelect.addEventListener('change', async function() {
-            const selectedBookKey = this.value;
-            document.getElementById('review-output').innerHTML = '';
+            // Fetch both starters and characters simultaneously
+            const startersPromise = apiCall({ bookTitle: currentBookTitle, question: "GET_GREETING_AND_STARTERS" });
+            const charactersPromise = apiCall({ bookTitle: currentBookTitle, question: "GET_CHARACTERS" });
 
-            if (!selectedBookKey) {
-                chatContainer.classList.add('hidden');
-                return;
-            }
-            
-            const book = reviewsDatabase[selectedBookKey];
-            if (book) {
-                currentBookTitle = book.title;
-                chatBookTitle.textContent = currentBookTitle;
-                
-                // Reset chat and show a loading message
-                chatHistory = [];
-                chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBookTitle}"...</p></div>`;
-                chatContainer.classList.remove('hidden');
+            try {
+                const [startersData, charactersData] = await Promise.all([startersPromise, charactersPromise]);
 
-                // NEW: Fetch the greeting and starters
-                try {
-                    const response = await fetch('/.netlify/functions/search', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            bookTitle: currentBookTitle,
-                            question: "GET_GREETING_AND_STARTERS" 
-                        })
+                // Populate starters
+                let startersHTML = startersData.starters.map(starter => 
+                    `<button class="conversation-starter bg-white border border-bronze text-bronze text-sm font-semibold py-1 px-3 rounded-full hover:bg-bronze hover:text-white transition">${starter}</button>`
+                ).join('');
+                chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${startersData.greeting}</p><div class="mt-3 flex flex-wrap gap-2">${startersHTML}</div></div>`;
+
+                document.querySelectorAll('.conversation-starter').forEach(button => button.addEventListener('click', () => sendMessage(button.textContent)));
+
+                // Populate characters if any
+                if (charactersData && charactersData.length > 0) {
+                    characterSelect.innerHTML = '<option>The Book Itself</option>';
+                    charactersData.forEach(char => {
+                        const option = document.createElement('option');
+                        option.textContent = char;
+                        characterSelect.appendChild(option);
                     });
-                    if (!response.ok) throw new Error('Could not load AI Mentor.');
-
-                    const data = await response.json();
-                    
-                    let startersHTML = data.starters.map(starter => 
-                        `<button class="conversation-starter bg-white border border-bronze text-bronze text-sm font-semibold py-1 px-3 rounded-full hover:bg-bronze hover:text-white transition">${starter}</button>`
-                    ).join('');
-
-                    chatMessages.innerHTML = `
-                        <div class="p-3 bg-cream rounded-lg max-w-lg">
-                            <p class="text-sm font-bold text-maroon">AI Mentor</p>
-                            <p>${data.greeting}</p>
-                            <div class="mt-3 flex flex-wrap gap-2">
-                                ${startersHTML}
-                            </div>
-                        </div>
-                    `;
-
-                    // Add event listeners to the new starter buttons
-                    document.querySelectorAll('.conversation-starter').forEach(button => {
-                        button.addEventListener('click', function() {
-                            const question = this.textContent;
-                            sendMessage(question);
-                        });
-                    });
-
-                } catch (error) {
-                     chatMessages.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>${error.message}</p></div>`;
+                    characterSelectContainer.classList.remove('hidden');
                 }
+            } catch (error) {
+                 addMessage("Error", error.message);
             }
-        });
+        }
+    });
 
-        // --- When a user submits a question in the chat ---
-        chatForm.addEventListener('submit', function(event) {
-            event.preventDefault();
-            const userQuestion = chatInput.value.trim();
-            sendMessage(userQuestion);
-        });
-    </script>
+    characterSelect.addEventListener('change', function() {
+        currentCharacter = this.value;
+        chatHistory = []; // Reset history when perspective changes
+        addMessage("System", `You are now speaking with ${currentCharacter}.`, false);
+    });
+
+    async function sendMessage(userQuestion) {
+         if (!userQuestion || !currentBookTitle) return;
+
+        addMessage("You", userQuestion, true);
+        chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
+        chatSubmitButton.disabled = true;
+
+        const thinkingDiv = addMessage(currentCharacter, `<span class="italic">Thinking...</span>`);
+
+        try {
+            const data = await apiCall({
+                bookTitle: currentBookTitle,
+                question: userQuestion,
+                history: chatHistory.slice(0, -1),
+                character: currentCharacter
+            });
+
+            chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
+            thinkingDiv.querySelector('p:last-child').innerHTML = data.answer;
+
+        } catch (error) {
+            chatHistory.pop(); 
+            thinkingDiv.querySelector('p:last-child').innerHTML = error.message;
+            thinkingDiv.querySelector('div').classList.add('bg-red-100', 'border', 'border-red-400', 'text-red-700');
+        } finally {
+            chatSubmitButton.disabled = false;
+            chatInput.focus();
+        }
+    }
+
+    chatForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        sendMessage(chatInput.value.trim());
+        chatInput.value = '';
+    });
+</script>
 </body>
 </html>
