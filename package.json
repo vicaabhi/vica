@@ -1,7 +1,7 @@
 {
-  name vica-ai-search,
-  version 1.0.0,
-  dependencies {
-    @googlegenerative-ai ^0.11.3
+  "name": "vica-ai-search",
+  "version": "1.0.0",
+  "dependencies": {
+    "@google/generative-ai": "^0.11.3"
   }
 }
