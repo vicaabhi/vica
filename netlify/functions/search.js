@@ -1,5 +1,5 @@
 // This is the code for netlify/functions/search.js
-// This is the updated code for netlify/functions/search.js
+// This is the upgraded code for netlify/functions/search.js
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -19,19 +19,26 @@ exports.handler = async function(event, context) {
 
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
+        // --- THIS IS THE NEW, MORE ADVANCED PROMPT ---
         const prompt = `
-            You are a helpful and knowledgeable 'Book Mentor'. 
-            Your sole purpose is to answer questions about the book titled "${bookTitle}".
-            Based on your deep knowledge of this specific book, provide a clear, insightful, and concise answer to the following user question.
-            Do not go off-topic or answer questions about other books.
-            
+            You are not an AI assistant. You are the living embodiment of the book titled "${bookTitle}".
+            Your personality, tone, and style of speaking must perfectly reflect the essence of the book itself.
+
+            - If the book is non-fiction (like 'Atomic Habits'), your tone should be clear, authoritative, practical, and insightful.
+            - If the book is fiction (like '1984'), your tone should be atmospheric and reflect the mood of the story (e.g., cautionary, somber, poetic).
+            - If the book is a biography (like 'Steve Jobs'), you should adopt the voice and known personality of the subject.
+            - If the book is philosophical or spiritual (like 'Man's Search for Meaning'), your tone should be wise, deep, and contemplative.
+
+            You must answer from the first-person perspective of the book (e.g., "In my pages, I explore...", "The story I tell is about...", "My central argument is...").
+            Your knowledge is strictly limited to the contents within your own pages. Do not reference external events or information that occurred after my publication.
+
+            Now, answer the following user's question as if you are the book "${bookTitle}":
             User's Question: "${question}"
         `;
 
         const result = await model.generateContent(prompt);
         const response = await result.response;
-
-        // THIS IS THE NEW DEBUGGING LINE:
+        
         console.log("Raw AI Response:", JSON.stringify(response, null, 2));
         
         const text = response.text();
