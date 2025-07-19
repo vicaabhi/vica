@@ -1,6 +1,6 @@
 // This is the code for netlify/functions/search.js
-// This is the upgraded code for netlify/functions/search.js
-// It can now generate starters AND continue a conversation.
+// This is the final, most advanced code for netlify/functions/search.js
+// It can generate starters, get characters, and role-play as the book or a character.
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -12,61 +12,57 @@ exports.handler = async function(event, context) {
     }
 
     try {
-        const { bookTitle, question, history } = JSON.parse(event.body);
+        const { bookTitle, question, history, character } = JSON.parse(event.body);
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
         if (!bookTitle || !question) {
             return { statusCode: 400, body: 'Book title and question are required.' };
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
-
-        // --- NEW LOGIC: Check if we need to generate starters ---
+        // --- MODE 1: Get Initial Greeting and Starters ---
         if (question === "GET_GREETING_AND_STARTERS") {
-            const starterPrompt = `
-                You are a helpful AI assistant for the 'VICA' website. Your task is to generate an engaging greeting and three thought-provoking "conversation starter" questions for the book titled "${bookTitle}".
-                The response must be in a specific JSON format. The JSON object must have two keys: "greeting" and "starters".
-                - "greeting": A short, welcoming message written from the book's unique first-person persona (e.g., "I am '1984'. My pages contain a warning for the future. What would you like to understand first?").
-                - "starters": An array of exactly 3 strings, where each string is a compelling question a user might ask (e.g., "What is the meaning of Newspeak?", "Describe the character of O'Brien.", "What are my main themes?").
-                Do not include any text or formatting outside of the JSON object.
-            `;
+            const starterPrompt = `You are a helpful AI assistant. Your task is to generate an engaging greeting and three "conversation starter" questions for the book titled "${bookTitle}". The response must be a single JSON object with two keys: "greeting" and "starters". "greeting" should be a short, welcoming message from the book's unique first-person persona. "starters" must be an array of exactly 3 strings. Do not include any text outside the JSON object.`;
             const result = await model.generateContent(starterPrompt);
-            const response = await result.response;
-            const text = response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-            
-            return {
-                statusCode: 200,
-                headers: { "Content-Type": "application/json" },
-                body: text,
-            };
+            const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+            return { statusCode: 200, headers: { "Content-Type": "application/json" }, body: text };
         }
 
-        // --- EXISTING LOGIC: Handle a regular conversation turn ---
-        const systemPrompt = `You are not an AI assistant. You are the living embodiment of the book titled "${bookTitle}". Your personality, tone, and style of speaking must perfectly reflect the essence of the book itself. You must answer from the first-person perspective of the book (e.g., "In my pages, I explore..."). Your knowledge is strictly limited to the contents within your own pages.`;
+        // --- MODE 2: Get Character List ---
+        if (question === "GET_CHARACTERS") {
+            const characterPrompt = `For the book "${bookTitle}", list the top 3 to 5 most significant characters suitable for a role-playing chat. The response must be a single JSON array of strings. For example: ["Jay Gatsby", "Nick Carraway", "Daisy Buchanan"]. If the book is non-fiction or has no clear characters, return an empty array []. Do not include any text outside the JSON array.`;
+            const result = await model.generateContent(characterPrompt);
+            const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+            return { statusCode: 200, headers: { "Content-Type": "application/json" }, body: text };
+        }
 
+        // --- MODE 3: Handle a Regular Conversation Turn (with persona logic) ---
+        let systemPrompt;
+        if (character && character !== "The Book Itself") {
+            // Persona is a character
+            systemPrompt = `You are not an AI. You are a character from within the book "${bookTitle}". You must fully embody the personality, voice, knowledge, and biases of **${character}**. Your answers must be from the first-person perspective of **${character}**. Your knowledge is strictly limited to what **${character}** would know or believe at the end of the story. Do not break character.`;
+        } else {
+            // Persona is the book itself (default)
+            systemPrompt = `You are not an AI assistant. You are the living embodiment of the book titled "${bookTitle}". Your personality and tone must reflect the essence of the book itself. You must answer from the first-person perspective of the book (e.g., "In my pages, I explore..."). Your knowledge is strictly limited to the contents within your own pages.`;
+        }
+        
         const fullHistory = [
             { role: "user", parts: [{ text: systemPrompt }] },
-            { role: "model", parts: [{ text: `I am "${bookTitle}". I am ready to answer your questions.` }] },
+            { role: "model", parts: [{ text: "I understand my role. I am ready to answer." }] },
             ...(history || [])
         ];
 
         const chat = model.startChat({ history: fullHistory });
         const result = await chat.sendMessage(question);
-        const response = await result.response;
-        const text = response.text();
+        const text = result.response.text();
         
-        const answerPayload = { answer: text };
-
         return {
             statusCode: 200,
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(answerPayload),
+            body: JSON.stringify({ answer: text }),
         };
 
     } catch (error) {
         console.error("Error in AI function:", error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: "Sorry, I encountered an error." }),
-        };
+        return { statusCode: 500, body: JSON.stringify({ error: "Sorry, I encountered an error." }) };
     }
 };
