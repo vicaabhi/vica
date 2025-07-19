@@ -1,5 +1,7 @@
 // This is the code for netlify/functions/search.js
 
+// This is the corrected code for netlify/functions/search.js
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 // Get the API key from the environment variables
@@ -17,7 +19,8 @@ exports.handler = async function(event, context) {
             return { statusCode: 400, body: 'Book title is required.' };
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // CORRECTED MODEL NAME
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
         const prompt = `
             You are a sophisticated literary review AI.
