@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VICA - A World of Stories, Reflections, and Revolutionary Ideas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #FDFBF8; /* Cream */
+            color: #1A1A1A; /* Ink Black */
+            scroll-behavior: smooth;
+        }
+        .font-serif {
+            font-family: 'serif';
+        }
+        .font-sans {
+            font-family: 'sans-serif';
+        }
+        .bg-bronze {
+            background-color: #A9714B;
+        }
+        .text-bronze {
+            color: #A9714B;
+        }
+        .border-bronze {
+            border-color: #A9714B;
+        }
+        .bg-maroon {
+            background-color: #800000;
+        }
+        .text-maroon {
+            color: #800000;
+        }
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .underline-animation {
+            display: inline-block;
+            position: relative;
+        }
+        .underline-animation::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #A9714B;
+            transform-origin: bottom right;
+            transition: transform 0.25s ease-out;
+        }
+        .underline-animation:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <header class="bg-cream/80 backdrop-blur-sm sticky top-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-maroon font-serif">VICA</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="underline-animation text-lg">Home</a>
+                <a href="#about" class="underline-animation text-lg">About</a>
+                <a href="#shelf" class="underline-animation text-lg">The Shelf</a>
+                <a href="#ai-review" class="underline-animation text-lg">AI Insights</a>
+                <a href="#community" class="underline-animation text-lg">Community</a>
+            </nav>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="h-screen bg-cover bg-center parallax" style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto=format&fit=crop');">
+        <div class="h-full flex flex-col justify-center items-center bg-black/50 text-white text-center p-6">
+            <h1 class="text-5xl md:text-7xl font-extrabold font-serif mb-4">Ideas. Stories. Change.</h1>
+            <p class="text-xl md:text-2xl font-light">Welcome to VICA – A World of Stories, Reflections, and Revolutionary Ideas.</p>
+        </div>
+    </section>
+
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto grid md:grid-cols-5 gap-12 items-center">
+            <div class="md:col-span-2">
+                <img src="https://placehold.co/400x500/A9714B/FDFBF8?text=Abhishek+Mishra" alt="Abhishek Mishra" class="rounded-lg shadow-2xl w-full border-4 border-bronze">
+            </div>
+            <div class="md:col-span-3">
+                <h2 class="text-4xl font-serif text-maroon mb-6">About VICA</h2>
+                <div class="space-y-6 text-lg text-gray-700">
+                    <p class="italic">"I’m a thinker, writer, and dreamer from India, chronicling the intersection of personal journeys, spirituality, power, and transformation through fiction and essays. VICA is my digital home for powerful ideas and global conversations."</p>
+                    <p class="font-bold text-bronze">- Abhishek Mishra, Founder</p>
+                    <p>"VICA is more than a platform — it's a sanctuary of reflections, storytelling, and intellectual depth. Whether you're here to read a soul-stirring story or uncover insights through AI-powered book reviews, VICA is your guide to navigate ideas that matter."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shelf" class="bg-cream py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-serif text-maroon text-center mb-12">The Shelf</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-maroon flex items-center justify-center p-4">
+                       <h3 class="text-3xl text-white font-serif text-center">The Name Beneath the Dust</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">The Name Beneath the Dust</h3>
+                        <p class="text-gray-600 mb-4">A gripping tale of identity and discovery.</p>
+                        <a href="https://amzn.in/d/i0xbJxy" target="_blank" class="inline-block bg-maroon text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Buy Now on Amazon</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-bronze flex items-center justify-center p-4">
+                       <h3 class="text-2xl text-white font-serif text-center">My Life Journey</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">My Life Journey</h3>
+                        <p class="text-gray-600 mb-4">A personal account of growth and reflection.</p>
+                        <a href="https://vicaabhi.medium.com/my-life-journey-d7d1b4f8160c" target="_blank" class="inline-block bg-bronze text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Read Now</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-maroon flex items-center justify-center p-4">
+                       <h3 class="text-2xl text-white font-serif text-center">Evolution of God</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Evolution of God</h3>
+                        <p class="text-gray-600 mb-4">A deep dive into the concept of divinity.</p>
+                        <a href="https://vicaabhi.medium.com/evolution-of-god-b6e013cdba59" target="_blank" class="inline-block bg-bronze text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Read Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai-review" class="bg-gray-100 py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-serif text-maroon mb-4">Curated Book Insights</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Select a book from this curated library to read a detailed, AI-generated analysis of its summary, strengths, weaknesses, and most famous quotes.</p>
+
+            <div class="max-w-xl mx-auto">
+                <select id="book-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                    <option value="">-- Select a Book --</option>
+                    <option value="100_startup">The $100 Startup</option>
+                    <option value="1984">1984</option>
+                    <option value="a_man_without_a_country">A Man Without a Country</option>
+                    <option value="a_peace_to_end_all_peace">A Peace to End All Peace</option>
+                    <option value="a_tale_of_two_cities">A Tale of Two Cities</option>
+                    <option value="a_thousand_splendid_suns">A Thousand Splendid Suns</option>
+                    <option value="ai_superpowers">AI Superpowers</option>
+                    <option value="and_the_mountains_echoed">And the Mountains Echoed</option>
+                    <option value="animal_farm">Animal Farm</option>
+                    <option value="anna_karenina">Anna Karenina</option>
+                    <option value="arab_and_jew">Arab and Jew: Wounded Spirits in a Promised Land</option>
+                    <option value="astrophysics_for_people_in_a_hurry">Astrophysics for People in a Hurry</option>
+                    <option value="autobiography_of_a_yogi">Autobiography of a Yogi</option>
+                    <option value="be_here_now">Be Here Now</option>
+                    <option value="black_flags_the_rise_of_isis">Black Flags: The Rise of ISIS</option>
+                    <option value="caste">Caste: The Lies That Divide Us</option>
+                    <option value="catch_22">Catch-22</option>
+                    <option value="creativity_inc">Creativity Inc.</option>
+                    <option value="crime_and_punishment">Crime and Punishment</option>
+                    <option value="da_vinci_and_the_40_answers">Da Vinci & the 40 Answers</option>
+                    <option value="denial_of_death">Denial of Death</option>
+                    <option value="dispatches">Dispatches</option>
+                    <option value="divine_comedy">Divine Comedy</option>
+                    <option value="elon_musk">Elon Musk</option>
+                    <option value="fahrenheit_451">Fahrenheit 451</option>
+                    <option value="ghost_wars">Ghost Wars</option>
+                    <option value="good_to_great">Good to Great</option>
+                    <option value="guns_germs_and_steel">Guns, Germs and Steel</option>
+                    <option value="how_i_braved_anu_aunty">How I Braved Anu Aunty & Co-Founded a Million Dollar Company</option>
+                    <option value="howard_hughes">Howard Hughes</option>
+                    <option value="invent_and_wander">Invent & Wander</option>
+                    <option value="isis_inside_the_army_of_terror">ISIS: Inside the Army of Terror</option>
+                    <option value="kingdom_of_the_unjust">Kingdom of the Unjust</option>
+                    <option value="leonardo_da_vinci">Leonardo da Vinci</option>
+                    <option value="man_s_search_for_meaning">Man’s Search for Meaning</option>
+                    <option value="metamorphosis">Metamorphosis</option>
+                    <option value="midnight_in_the_garden_of_good_and_evil">Midnight in the Garden of Good and Evil</option>
+                    <option value="moby_dick">Moby Dick</option>
+                    <option value="mossad">Mossad</option>
+                    <option value="nonzero">Nonzero</option>
+                    <option value="notes_from_underground">Notes from Underground</option>
+                    <option value="one_hundred_years_of_solitude">One Hundred Years of Solitude</option>
+                    <option value="our_final_invention">Our Final Invention</option>
+                    <option value="pale_blue_dot">Pale Blue Dot</option>
+                    <option value="permanent_record">Permanent Record</option>
+                    <option value="pride_and_prejudice">Pride and Prejudice</option>
+                    <option value="rich_dad_poor_dad">Rich Dad Poor Dad</option>
+                    <option value="rise_and_kill_first">Rise and Kill First</option>
+                    <option value="samsung_rising">Samsung Rising</option>
+                    <option value="shoe_dog">Shoe Dog</option>
+                    <option value="surely_youre_joking_mr_feynman">Surely You’re Joking, Mr. Feynman</option>
+                    <option value="slaughterhouse_five">Slaughterhouse-Five</option>
+                    <option value="steve_jobs">Steve Jobs</option>
+                    <option value="superintelligence">Superintelligence</option>
+                    <option value="tertium_organum">Tertium Organum</option>
+                    <option value="the_allies">The Allies</option>
+                    <option value="the_argumentative_indian">The Argumentative Indian</option>
+                    <option value="the_assassins_gate">The Assassin’s Gate: America in Iraq</option>
+                    <option value="the_book_thief">The Book Thief</option>
+                    <option value="the_brothers_karamazov">The Brothers Karamazov</option>
+                    <option value="the_catcher_in_the_rye">The Catcher in the Rye</option>
+                    <option value="the_clash_of_civilizations">The Clash of Civilizations and the Remaking of World Order</option>
+                    <option value="the_dragons_of_eden">The Dragons of Eden</option>
+                    <option value="the_end_of_history_and_the_last_man">The End of History and the Last Man</option>
+                    <option value="the_everything_store">The Everything Store: Jeff Bezos and the Age of Amazon</option>
+                    <option value="the_evolution_of_god">The Evolution of God</option>
+                    <option value="the_fourth_age">The Fourth Age</option>
+                    <option value="the_fourth_industrial_revolution">The Fourth Industrial Revolution</option>
+                    <option value="the_four">The Four</option>
+                    <option value="the_god_delusion">The God Delusion</option>
+                    <option value="the_gods_themselves">The Gods Themselves</option>
+                    <option value="the_great_gatsby">The Great Gatsby</option>
+                    <option value="the_great_mother">The Great Mother</option>
+                    <option value="the_great_war_for_civilizations">The Great War for Civilizations</option>
+                    <option value="the_holocaust">The Holocaust</option>
+                    <option value="the_iliad">The Iliad</option>
+                    <option value="the_immortals_of_meluha">The Immortals of Meluha</option>
+                    <option value="the_innovators">The Innovators</option>
+                    <option value="the_kite_runner">The Kite Runner</option>
+                    <option value="the_longest_war">The Longest War</option>
+                    <option value="the_midnight_library">The Midnight Library</option>
+                    <option value="the_moon_is_a_harsh_mistress">The Moon Is a Harsh Mistress</option>
+                    <option value="the_moral_animal">The Moral Animal</option>
+                    <option value="the_oath_of_the_vayuputras">The Oath of the Vayuputras</option>
+                    <option value="the_odyssey">The Odyssey</option>
+                    <option value="the_prize">The Prize: The Epic Quest for Oil, Money, and Power</option>
+                    <option value="the_richest_man_in_babylon">The Richest Man in Babylon</option>
+                    <option value="the_science_of_self_realization">The Science of Self Realization</option>
+                    <option value="the_secret_of_the_nagas">The Secret of the Nagas</option>
+                    <option value="the_subtle_art_of_not_giving_a_f_ck">The Subtle Art of Not Giving a F*ck</option>
+                    <option value="the_top_five_regrets_of_the_dying">The Top Five Regrets of the Dying</option>
+                    <option value="the_trial">The Trial</option>
+                    <option value="the_virtue_of_nationalism">The Virtue of Nationalism</option>
+                    <option value="the_warmth_of_other_suns">The Warmth of Other Suns</option>
+                    <option value="think_and_grow_rich">Think and Grow Rich</option>
+                    <option value="to_kill_a_mockingbird">To Kill a Mockingbird</option>
+                    <option value="ulysses">Ulysses</option>
+                    <option value="war_and_peace">War and Peace</option>
+                    <option value="white_nights">White Nights</option>
+                    <option value="why_nations_fail">Why Nations Fail</option>
+                    <option value="wuthering_heights">Wuthering Heights</option>
+                    <option value="zero_to_one">Zero to One</option>
+                </select>
+            </div>
+
+            <div id="review-output" class="mt-8 text-left max-w-3xl mx-auto">
+                </div>
+        </div>
+    </section>
+
+    <section id="community" class="py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-serif text-maroon mb-6">Why VICA Exists</h2>
+            <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">VICA aims to unite readers, thinkers, and seekers across borders. We believe in the power of words to shift perspectives and shape futures.</p>
+        </div>
+    </section>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 VICA. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="reviews.js"></script>
+    <script>
+        document.getElementById('mobile-menu-button').onclick = function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        };
+
+        document.getElementById('book-select').addEventListener('change', function() {
+            const selectedBookKey = this.value;
+            const outputDiv = document.getElementById('review-output');
+            
+            if (!selectedBookKey) {
+                outputDiv.innerHTML = ''; 
+                return;
+            }
+
+            const review = reviewsDatabase[selectedBookKey];
+            
+            if (!review) { 
+                outputDiv.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500 font-semibold">Error: Review data not found. Please check the database.</p></div>';
+                return;
+            }
+
+            let reviewHTML = `
+                <div class="bg-white p-8 rounded-lg shadow-lg" style="animation: fadeIn 0.5s ease-in-out;">
+                    <h3 class="text-2xl font-bold text-maroon mb-1">${review.title}</h3>
+                    <p class="text-md text-gray-500 mb-6 font-semibold">by ${review.author}</p>
+                    
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Summary</h4>
+                            <p class="mt-2 text-gray-700 leading-relaxed">${review.summary}</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Pros</h4>
+                            <ul class="mt-2 space-y-3">
+                                ${review.pros.map(pro => `<li class="flex items-start"><span class="text-green-500 mr-3 mt-1">&#10003;</span><span class="text-gray-700">${pro}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Cons</h4>
+                            <ul class="mt-2 space-y-3">
+                                ${review.cons.map(con => `<li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10007;</span><span class="text-gray-700">${con}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Famous Quotes</h4>
+                            <div class="mt-3 space-y-4">
+                                ${review.quotes.map(quote => `<blockquote class="border-l-4 border-bronze/50 pl-4 italic text-gray-600">"${quote}"</blockquote>`).join('')}
+                            </div>
+                        </div>
+                        <div class="text-center pt-4">
+                            <a href="https://www.amazon.in/s?k=${encodeURIComponent(review.title + ' ' + review.author)}" target="_blank" class="inline-block bg-maroon text-white px-6 py-3 rounded-full font-bold hover:bg-opacity-90 transition text-lg">View on Amazon</a>
+                        </div>
+                    </div>
+                </div>
+                <style> @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } </style>
+            `;
+            
+            outputDiv.innerHTML = reviewHTML;
+        });
+    </script>
+</body>
+</html>
