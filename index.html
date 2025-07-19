@@ -299,120 +299,54 @@
             document.getElementById('mobile-menu').classList.toggle('hidden');
         };
 
-        const outputDiv = document.getElementById('review-output');
+        // --- ALL CHAT INTERFACE LOGIC ---
+        const bookSelect = document.getElementById('book-select');
         const chatContainer = document.getElementById('chat-container');
-        let currentBookForChat = { title: '', author: '' };
-
-        // --- This function displays the STATIC REVIEW and the NEW "Ask Question" button ---
-        function displayReview(review) {
-            currentBookForChat = { title: review.title, author: review.author }; // Save the current book context for the chat
-            chatContainer.classList.add('hidden'); // Hide chat when a new review is shown
-
-            let reviewHTML = `
-                <div class="bg-white p-8 rounded-lg shadow-lg" style="animation: fadeIn 0.5s ease-in-out;">
-                    <h3 class="text-2xl font-bold text-maroon mb-1">${review.title}</h3>
-                    <p class="text-md text-gray-500 mb-6 font-semibold">by ${review.author}</p>
-                    <div class="space-y-8">
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Summary</h4>
-                            <p class="mt-2 text-gray-700 leading-relaxed">${review.summary}</p>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Pros</h4>
-                            <ul class="mt-2 space-y-3">
-                                ${review.pros.map(pro => `<li class="flex items-start"><span class="text-green-500 mr-3 mt-1">&#10003;</span><span class="text-gray-700">${pro}</span></li>`).join('')}
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Cons</h4>
-                            <ul class="mt-2 space-y-3">
-                                ${review.cons.map(con => `<li class="flex items-start"><span class="text-red-500 mr-3 mt-1">&#10007;</span><span class="text-gray-700">${con}</span></li>`).join('')}
-                            </ul>
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-lg text-bronze border-b-2 border-bronze/30 pb-1">Famous Quotes</h4>
-                            <div class="mt-3 space-y-4">
-                                ${review.quotes.map(quote => `<blockquote class="border-l-4 border-bronze/50 pl-4 italic text-gray-600">"${quote}"</blockquote>`).join('')}
-                            </div>
-                        </div>
-                        <div class="text-center pt-4 border-t border-gray-200">
-                            <button id="start-chat-button" class="bg-bronze text-white font-bold py-3 px-6 rounded-full hover:bg-opacity-90 transition transform hover:scale-105">Ask a Follow-up Question</button>
-                        </div>
-                    </div>
-                </div>
-                <style> @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } </style>
-            `;
-            outputDiv.innerHTML = reviewHTML;
-
-            // Add the event listener for the NEW button that was just created
-            document.getElementById('start-chat-button').addEventListener('click', startChat);
-        }
-        
-        // --- Logic for CURATED DROPDOWN ---
-        document.getElementById('book-select').addEventListener('change', function() {
-            const selectedBookKey = this.value;
-            document.getElementById('live-search-input').value = '';
-            if (!selectedBookKey) {
-                outputDiv.innerHTML = ''; 
-                chatContainer.classList.add('hidden');
-                return;
-            }
-            const review = reviewsDatabase[selectedBookKey]; 
-            if (review) {
-                displayReview(review);
-            }
-        });
-
-        // --- Logic for LIVE SEARCH ---
-        document.getElementById('live-search-button').addEventListener('click', async function() {
-            const bookTitle = document.getElementById('live-search-input').value;
-            document.getElementById('book-select').value = '';
-            chatContainer.classList.add('hidden');
-            if (!bookTitle) {
-                outputDiv.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">Please enter a book title to search.</p></div>';
-                return;
-            }
-            outputDiv.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-lg">Searching the live AI... this may take a moment.</p></div>';
-            try {
-                const response = await fetch('/.netlify/functions/search', { 
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ bookTitle: bookTitle })
-                });
-                if (!response.ok) throw new Error('The AI is currently busy or could not find the book. Please try again.');
-                const reviewData = await response.json();
-                displayReview(reviewData);
-            } catch (error) {
-                outputDiv.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">${error.message}</p></div>`;
-            }
-        });
-
-        // --- NEW CHAT INTERFACE LOGIC ---
         const chatBookTitle = document.getElementById('chat-book-title');
         const chatMessages = document.getElementById('chat-messages');
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatSubmitButton = document.getElementById('chat-submit-button');
+        
+        let currentBookTitle = '';
+        let chatHistory = []; // NEW: Array to store the conversation history
 
-        function startChat() {
-            chatBookTitle.textContent = currentBookForChat.title;
-            chatMessages.innerHTML = `
-                <div class="p-3 bg-cream rounded-lg max-w-lg">
-                    <p class="text-sm font-bold text-maroon">AI Mentor</p>
-                    <p>I'm ready to discuss "${currentBookForChat.title}". What's your question?</p>
-                </div>
-            `;
-            chatContainer.classList.remove('hidden');
-            window.scrollTo({ top: chatContainer.offsetTop, behavior: 'smooth' });
-            chatInput.focus();
-        }
+        // When a user selects a book from the dropdown
+        bookSelect.addEventListener('change', function() {
+            const selectedBookKey = this.value;
+            // Hide the static review div if you have one
+            document.getElementById('review-output').innerHTML = '';
 
+            if (!selectedBookKey) {
+                chatContainer.classList.add('hidden');
+                return;
+            }
+            
+            const book = reviewsDatabase[selectedBookKey];
+            if (book) {
+                currentBookTitle = book.title;
+                chatBookTitle.textContent = currentBookTitle;
+                
+                // Reset chat and history, then show the interface
+                chatHistory = []; // NEW: Reset history for a new book
+                chatMessages.innerHTML = `
+                    <div class="p-3 bg-cream rounded-lg max-w-lg">
+                        <p class="text-sm font-bold text-maroon">AI Mentor</p>
+                        <p>Hello! I have deep knowledge of "${currentBookTitle}". What would you like to know?</p>
+                    </div>
+                `;
+                chatContainer.classList.remove('hidden');
+            }
+        });
+
+        // When a user submits a question in the chat
         chatForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             const userQuestion = chatInput.value.trim();
-            if (!userQuestion || !currentBookForChat.title) return;
+            if (!userQuestion || !currentBookTitle) return;
 
-            // Display user's message
+            // 1. Add user's message to history and display it
+            chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
             const userMessageDiv = document.createElement('div');
             userMessageDiv.classList.add('flex', 'justify-end');
             userMessageDiv.innerHTML = `<div class="p-3 bg-bronze text-white rounded-lg max-w-lg"><p class="text-sm font-bold">You</p><p>${userQuestion}</p></div>`;
@@ -421,27 +355,38 @@
             chatMessages.scrollTop = chatMessages.scrollHeight;
             chatSubmitButton.disabled = true;
 
-            // Show "Thinking..."
+            // 2. Show a thinking indicator
             const thinkingDiv = document.createElement('div');
             thinkingDiv.id = 'thinking-indicator';
             thinkingDiv.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p class="italic">Thinking...</p></div>`;
             chatMessages.appendChild(thinkingDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
 
-            // Call the AI function
+            // 3. Call the AI function with the FULL history
             try {
                 const response = await fetch('/.netlify/functions/search', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
-                        bookTitle: currentBookForChat.title,
-                        question: userQuestion 
+                        bookTitle: currentBookTitle,
+                        question: userQuestion,
+                        history: chatHistory.slice(0, -1) // Send history *before* the new question
                     })
                 });
-                if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
+
+                if (!response.ok) {
+                    throw new Error('The AI is currently busy. Please try again.');
+                }
+
                 const data = await response.json();
+                
+                // 4. Add AI's response to history and display it
+                chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
                 thinkingDiv.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${data.answer}</p></div>`;
+
             } catch (error) {
+                // If there's an error, remove the last user message from history to allow a retry
+                chatHistory.pop(); 
                 thinkingDiv.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>${error.message}</p></div>`;
             } finally {
                 chatMessages.scrollTop = chatMessages.scrollHeight;
