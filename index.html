@@ -307,15 +307,15 @@
             addMessage("System", `You are now speaking with ${currentCharacter}.`, false);
         });
 
-        async function apiCall(body) {
-            const response = await fetch('/.netlify/functions/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(body)
-            });
-            if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
-            return response.json();
-        }
+       async function apiCall(body, functionName = 'search') {
+    const response = await fetch(`/.netlify/functions/${functionName}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    });
+    if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
+    return response.json();
+}
 
         function addMessage(sender, message, isUser = false) {
             const messageDiv = document.createElement('div');
