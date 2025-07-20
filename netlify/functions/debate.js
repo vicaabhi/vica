@@ -1,4 +1,4 @@
-// This is the correct and final version of netlify/functions/debate.js
+// This is the upgraded "brainy" version of netlify/functions/debate.js
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -22,25 +22,17 @@ exports.handler = async function(event, context) {
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest", safetySettings });
         let prompt;
 
+        // The prompts now include Chain-of-Thought instructions for higher quality output
         if (mode === 'book') {
-            prompt = `
-                You are a master debate moderator and scriptwriter. Your task is to generate a debate between two books: "${book1Title}" and "${book2Title}".
-                The topic of the debate is: "${topic}".
-                You must adopt the persona, tone, and knowledge of each book when it is its turn to speak. Each book should argue its position based *only* on the ideas, themes, and events within its own pages.
-                The output must be a single JSON object. The object must have one key: "debate".
-                The value of "debate" should be an array of objects, where each object represents one turn in the conversation and has two keys: "speaker" (the title of the book) and "dialogue" (what the book's persona says).
-                Generate a debate with at least 6 turns (3 for each book). Make the arguments compelling, distinct, and true to the source material.
-            `;
+            prompt = `You are a master debate moderator. Your task is to generate a debate between "${book1Title}" and "${book2Title}" on the topic: "${topic}".
+            For each turn, first perform a private "Chain-of-Thought" reasoning: 1. Analyze the current state of the debate. 2. Recall core principles from the book whose turn it is. 3. Formulate a compelling argument or rebuttal in that book's persona.
+            Then, provide only the final dialogue.
+            The output must be a JSON object with one key: "debate". The value must be an array of objects, each with a "speaker" and "dialogue" key. Generate at least 6 turns.`;
         } else if (mode === 'character') {
-            prompt = `
-                You are a master playwright. Your task is to write a short, dramatic scene between two characters.
-                Character 1 is ${character1} from "${book1Title}".
-                Character 2 is ${character2} from "${book2Title}".
-                The scene should be based on the following scenario: "${topic}".
-                You must fully embody the personality, voice, and knowledge of each character. Generate a compelling dialogue with at least 6 turns, staying true to each character's personality and voice, even if the scenario is hypothetical.
-                The output must be a single JSON object with one key: "debate".
-                The value of "debate" should be an array of objects, where each object represents one turn and has two keys: "speaker" (the character's name) and "dialogue" (what the character says).
-            `;
+            prompt = `You are a master playwright. Your task is to write a short, dramatic scene between ${character1} (from "${book1Title}") and ${character2} (from "${book2Title}"), based on the scenario: "${topic}".
+            For each line of dialogue, first perform a private "Chain-of-Thought" reasoning: 1. Analyze the character's emotional state and motivation. 2. Recall their personality from the book. 3. Craft a line of dialogue that is powerful, authentic, and moves the scene forward.
+            Then, provide only the final dialogue.
+            The output must be a JSON object with one key: "debate". The value must be an array of objects, each with a "speaker" (the character's name) and "dialogue" key. Generate at least 6 turns.`;
         } else {
             return { statusCode: 400, body: 'Invalid mode specified.' };
         }
