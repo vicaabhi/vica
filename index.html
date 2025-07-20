@@ -153,30 +153,37 @@
         let currentBook = null;
         let chatHistory = [];
 
-        searchInput.addEventListener('input', async (e) => {
-            const query = e.target.value.trim().toLowerCase();
-            if (query.length < 3) {
-                resultsContainer.classList.add('hidden');
-                return;
-            }
-            const booksRef = db.collection('bestsellers');
-            const snapshot = await booksRef.where('title_lowercase', '>=', query).where('title_lowercase', '<=', query + '\uf8ff').limit(5).get();
-            resultsContainer.innerHTML = '';
-            if (snapshot.empty) {
-                resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No results found in the VICA library.</div>';
-            } else {
-                snapshot.forEach(doc => {
-                    const book = doc.data();
-                    const resultEl = document.createElement('div');
-                    resultEl.classList.add('p-3', 'hover:bg-gray-100', 'cursor-pointer', 'border-b');
-                    resultEl.innerHTML = `<p class="font-bold">${book.title}</p><p class="text-sm text-gray-600">${book.author}</p>`;
-                    resultEl.onclick = () => selectBook(book);
-                    resultsContainer.appendChild(resultEl);
-                });
-            }
-            resultsContainer.classList.remove('hidden');
-        });
+       // --- Search Logic (CORRECTED for Case-Insensitive Search) ---
+searchInput.addEventListener('input', async (e) => {
+    const query = e.target.value.trim().toLowerCase(); // Use lowercase for the query
+    if (query.length < 3) {
+        resultsContainer.classList.add('hidden');
+        return;
+    }
 
+    const booksRef = db.collection('bestsellers');
+    const snapshot = await booksRef
+        // Search the correct 'title_lowercase' field in your database
+        .where('title_lowercase', '>=', query)
+        .where('title_lowercase', '<=', query + '\uf8ff')
+        .limit(5)
+        .get();
+
+    resultsContainer.innerHTML = '';
+    if (snapshot.empty) {
+        resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No results found in the VICA library.</div>';
+    } else {
+        snapshot.forEach(doc => {
+            const book = doc.data();
+            const resultEl = document.createElement('div');
+            resultEl.classList.add('p-3', 'hover:bg-gray-100', 'cursor-pointer', 'border-b');
+            resultEl.innerHTML = `<p class="font-bold">${book.title}</p><p class="text-sm text-gray-600">${book.author}</p>`;
+            resultEl.onclick = () => selectBook(book);
+            resultsContainer.appendChild(resultEl);
+        });
+    }
+    resultsContainer.classList.remove('hidden');
+});
         function selectBook(book) {
             currentBook = book;
             searchInput.value = ''; 
