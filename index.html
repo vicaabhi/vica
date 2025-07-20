@@ -201,8 +201,7 @@
             <p>&copy; 2025 VICA. All Rights Reserved.</p>
         </div>
     </footer>
-    
-    <script>
+        <script>
         // --- Firebase Initialization ---
         const firebaseConfig = {
           apiKey: "AIzaSyDHhe4XtqB9clkTgfGUNM8oAtqIqhkJoNo",
@@ -275,8 +274,8 @@
             chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBook.title}"...</p></div>`;
             window.scrollTo({ top: chatContainer.offsetTop, behavior: 'smooth' });
 
-            const startersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_GREETING_AND_STARTERS" });
-            const charactersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_CHARACTERS" });
+            const startersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_GREETING_AND_STARTERS" }, 'search');
+            const charactersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_CHARACTERS" }, 'search');
 
             try {
                 const [startersData, charactersData] = await Promise.all([startersPromise, charactersPromise]);
@@ -306,16 +305,17 @@
             chatHistory = []; 
             addMessage("System", `You are now speaking with ${currentCharacter}.`, false);
         });
-
-       async function apiCall(body, functionName = 'search') {
-    const response = await fetch(`/.netlify/functions/${functionName}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    });
-    if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
-    return response.json();
-}
+        
+        // THIS IS THE CORRECTED apiCall FUNCTION
+        async function apiCall(body, functionName = 'search') {
+            const response = await fetch(`/.netlify/functions/${functionName}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
+            return response.json();
+        }
 
         function addMessage(sender, message, isUser = false) {
             const messageDiv = document.createElement('div');
@@ -344,7 +344,7 @@
                     question: userQuestion,
                     history: chatHistory.slice(0, -1),
                     character: currentCharacter
-                });
+                }, 'search'); // Always call the 'search' function for this chat
                 chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
                 thinkingDiv.querySelector('p:last-child').innerHTML = data.answer;
             } catch (error) {
@@ -361,69 +361,72 @@
             sendMessage(chatInput.value.trim());
             chatInput.value = '';
         });
-   // --- NEW: VICA DEBATES LOGIC ---
-const modeBookVsBook = document.getElementById('mode-book-vs-book');
-const modeCharVsChar = document.getElementById('mode-char-vs-char');
-const bookDebateControls = document.getElementById('book-debate-controls');
-const charDebateControls = document.getElementById('char-debate-controls');
-const startDebateButton = document.getElementById('start-debate-button');
-const debateOutput = document.getElementById('debate-output');
-let currentDebateMode = 'book';
+        
+        // --- VICA DEBATES LOGIC ---
+        const modeBookVsBook = document.getElementById('mode-book-vs-book');
+        const modeCharVsChar = document.getElementById('mode-char-vs-char');
+        const bookDebateControls = document.getElementById('book-debate-controls');
+        const charDebateControls = document.getElementById('char-debate-controls');
+        const startDebateButton = document.getElementById('start-debate-button');
+        const debateOutput = document.getElementById('debate-output');
+        let currentDebateMode = 'book';
 
-modeBookVsBook.addEventListener('click', () => {
-    currentDebateMode = 'book';
-    bookDebateControls.classList.remove('hidden');
-    charDebateControls.classList.add('hidden');
-    modeBookVsBook.classList.add('bg-bronze', 'text-white');
-    modeCharVsChar.classList.remove('bg-bronze', 'text-white');
-});
-
-modeCharVsChar.addEventListener('click', () => {
-    currentDebateMode = 'character';
-    charDebateControls.classList.remove('hidden');
-    bookDebateControls.classList.add('hidden');
-    modeCharVsChar.classList.add('bg-bronze', 'text-white');
-    modeBookVsBook.classList.remove('bg-bronze', 'text-white');
-});
-
-startDebateButton.addEventListener('click', async () => {
-    let payload = { mode: currentDebateMode };
-
-    if (currentDebateMode === 'book') {
-        payload.book1Title = document.getElementById('book1-input').value;
-        payload.book2Title = document.getElementById('book2-input').value;
-        payload.topic = document.getElementById('debate-topic-input').value;
-    } else {
-        payload.character1 = document.getElementById('char1-input').value;
-        payload.book1Title = document.getElementById('char-book1-input').value;
-        payload.character2 = document.getElementById('char2-input').value;
-        payload.book2Title = document.getElementById('char-book2-input').value;
-        payload.topic = document.getElementById('scenario-input').value;
-    }
-
-    if (!payload.book1Title || !payload.book2Title || !payload.topic) {
-        alert('Please fill in all fields.');
-        return;
-    }
-
-    debateOutput.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-lg">Generating debate... The AI is thinking deeply.</p></div>';
-    startDebateButton.disabled = true;
-    startDebateButton.textContent = 'Generating...';
-
-    try {
-        const data = await apiCall(payload, 'debate');
-        let debateHTML = '<div class="bg-white p-8 rounded-lg shadow-lg space-y-4">';
-        data.debate.forEach(turn => {
-            debateHTML += `<div><p class="font-bold text-maroon">${turn.speaker}:</p><p class="pl-4">${turn.dialogue}</p></div>`;
+        modeBookVsBook.addEventListener('click', () => {
+            currentDebateMode = 'book';
+            bookDebateControls.classList.remove('hidden');
+            charDebateControls.classList.add('hidden');
+            modeBookVsBook.classList.add('bg-bronze', 'text-white');
+            modeCharVsChar.classList.remove('bg-bronze', 'text-white');
         });
-        debateHTML += '</div>';
-        debateOutput.innerHTML = debateHTML;
-    } catch (error) {
-        debateOutput.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">${error.message}</p></div>`;
-    } finally {
-        startDebateButton.disabled = false;
-        startDebateButton.textContent = 'Generate';
-    }
-}); </script>
+
+        modeCharVsChar.addEventListener('click', () => {
+            currentDebateMode = 'character';
+            charDebateControls.classList.remove('hidden');
+            bookDebateControls.classList.add('hidden');
+            modeCharVsChar.classList.add('bg-bronze', 'text-white');
+            modeBookVsBook.classList.remove('bg-bronze', 'text-white');
+        });
+
+        startDebateButton.addEventListener('click', async () => {
+            let payload = { mode: currentDebateMode };
+
+            if (currentDebateMode === 'book') {
+                payload.book1Title = document.getElementById('book1-input').value;
+                payload.book2Title = document.getElementById('book2-input').value;
+                payload.topic = document.getElementById('debate-topic-input').value;
+            } else {
+                payload.character1 = document.getElementById('char1-input').value;
+                payload.book1Title = document.getElementById('char-book1-input').value;
+                payload.character2 = document.getElementById('char2-input').value;
+                payload.book2Title = document.getElementById('char-book2-input').value;
+                payload.topic = document.getElementById('scenario-input').value;
+            }
+
+            if (!payload.book1Title || !payload.book2Title || !payload.topic) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            debateOutput.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-lg">Generating debate... The AI is thinking deeply.</p></div>';
+            startDebateButton.disabled = true;
+            startDebateButton.textContent = 'Generating...';
+
+            try {
+                // This now correctly calls the 'debate' function
+                const data = await apiCall(payload, 'debate');
+                let debateHTML = '<div class="bg-white p-8 rounded-lg shadow-lg space-y-4">';
+                data.debate.forEach(turn => {
+                    debateHTML += `<div><p class="font-bold text-maroon">${turn.speaker}:</p><p class="pl-4">${turn.dialogue}</p></div>`;
+                });
+                debateHTML += '</div>';
+                debateOutput.innerHTML = debateHTML;
+            } catch (error) {
+                debateOutput.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">${error.message}</p></div>`;
+            } finally {
+                startDebateButton.disabled = false;
+                startDebateButton.textContent = 'Generate';
+            }
+        });
+    </script>
 </body>
 </html>
