@@ -336,8 +336,9 @@ searchInput.addEventListener('keydown', function (e) {
             characterSelectContainer.classList.add('hidden');
             chatContainer.classList.remove('hidden');
             chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBook.title}"...</p></div>`;
-            window.scrollTo({ top: chatContainer.offsetTop, behavior: 'smooth' });
-
+           setTimeout(() => {
+  chatContainer.scrollIntoView({ behavior: 'smooth' });
+}, 100);
             const startersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_GREETING_AND_STARTERS" }, 'search');
             const charactersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_CHARACTERS" }, 'search');
 
