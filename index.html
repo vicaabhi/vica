@@ -5,59 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VICA - A World of Stories, Reflections, and Revolutionary Ideas</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <style>
-        body {
-            background-color: #FDFBF8; /* Cream */
-            color: #1A1A1A; /* Ink Black */
-            scroll-behavior: smooth;
-        }
-        .font-serif {
-            font-family: 'serif';
-        }
-        .font-sans {
-            font-family: 'sans-serif';
-        }
-        .bg-bronze {
-            background-color: #A9714B;
-        }
-        .text-bronze {
-            color: #A9714B;
-        }
-        .border-bronze {
-            border-color: #A9714B;
-        }
-        .bg-maroon {
-            background-color: #800000;
-        }
-        .text-maroon {
-            color: #800000;
-        }
-        .parallax {
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-        .underline-animation {
-            display: inline-block;
-            position: relative;
-        }
-        .underline-animation::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #A9714B;
-            transform-origin: bottom right;
-            transition: transform 0.25s ease-out;
-        }
-        .underline-animation:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
+        body { background-color: #FDFBF8; color: #1A1A1A; scroll-behavior: smooth; }
+        .font-serif { font-family: 'serif'; }
+        .font-sans { font-family: 'sans-serif'; }
+        .bg-bronze { background-color: #A9714B; }
+        .text-bronze { color: #A9714B; }
+        .border-bronze { border-color: #A9714B; }
+        .bg-maroon { background-color: #800000; }
+        .text-maroon { color: #800000; }
+        .parallax { background-attachment: fixed; background-position: center; background-repeat: no-repeat; background-size: cover; }
     </style>
 </head>
 <body class="font-sans">
@@ -65,18 +24,7 @@
     <header class="bg-cream/80 backdrop-blur-sm sticky top-0 z-50 shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-3xl font-bold text-maroon font-serif">VICA</a>
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#home" class="underline-animation text-lg">Home</a>
-                <a href="#about" class="underline-animation text-lg">About</a>
-                <a href="#shelf" class="underline-animation text-lg">The Shelf</a>
-                <a href="#ai-review" class="underline-animation text-lg">AI Insights</a>
-                <a href="#community" class="underline-animation text-lg">Community</a>
-            </nav>
-            <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-gray-800 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
-            </div>
+            <nav class="hidden md:flex items-center space-x-8"><a href="#home" class="hover:text-bronze">Home</a><a href="#about" class="hover:text-bronze">About</a><a href="#shelf" class="hover:text-bronze">The Shelf</a><a href="#ai-review" class="hover:text-bronze">AI Insights</a></nav>
         </div>
     </header>
 
@@ -86,12 +34,10 @@
             <p class="text-xl md:text-2xl font-light">Welcome to VICA – A World of Stories, Reflections, and Revolutionary Ideas.</p>
         </div>
     </section>
-
+    
     <section id="about" class="py-20 px-6">
         <div class="container mx-auto grid md:grid-cols-5 gap-12 items-center">
-            <div class="md:col-span-2">
-                <img src="https://placehold.co/400x500/A9714B/FDFBF8?text=Abhishek+Mishra" alt="Abhishek Mishra" class="rounded-lg shadow-2xl w-full border-4 border-bronze">
-            </div>
+            <div class="md:col-span-2"><img src="https://placehold.co/400x500/A9714B/FDFBF8?text=Abhishek+Mishra" alt="Abhishek Mishra" class="rounded-lg shadow-2xl w-full border-4 border-bronze"></div>
             <div class="md:col-span-3">
                 <h2 class="text-4xl font-serif text-maroon mb-6">About VICA</h2>
                 <div class="space-y-6 text-lg text-gray-700">
@@ -141,288 +87,169 @@
         </div>
     </section>
 
-<section id="ai-review" class="bg-gray-100 py-20 px-6">
-    <div class="container mx-auto text-center">
-        <h2 class="text-4xl font-serif text-maroon mb-4">Talk to a Book</h2>
-        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Select a book from the curated library to begin an interactive conversation with its persona or even its characters.</p>
-        <div class="max-w-xl mx-auto mb-10">
-            <select id="book-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
-                <option value="">-- Select a Book to Begin --</option>   
-                    <option value="100_startup">The $100 Startup</option>
-                    <option value="1984">1984</option>
-                    <option value="a_man_without_a_country">A Man Without a Country</option>
-                    <option value="a_peace_to_end_all_peace">A Peace to End All Peace</option>
-                    <option value="a_tale_of_two_cities">A Tale of Two Cities</option>
-                    <option value="a_thousand_splendid_suns">A Thousand Splendid Suns</option>
-                    <option value="ai_superpowers">AI Superpowers</option>
-                    <option value="and_the_mountains_echoed">And the Mountains Echoed</option>
-                    <option value="animal_farm">Animal Farm</option>
-                    <option value="anna_karenina">Anna Karenina</option>
-                    <option value="arab_and_jew">Arab and Jew: Wounded Spirits in a Promised Land</option>
-                    <option value="astrophysics_for_people_in_a_hurry">Astrophysics for People in a Hurry</option>
-                    <option value="autobiography_of_a_yogi">Autobiography of a Yogi</option>
-                    <option value="be_here_now">Be Here Now</option>
-                    <option value="black_flags_the_rise_of_isis">Black Flags: The Rise of ISIS</option>
-                    <option value="caste">Caste: The Lies That Divide Us</option>
-                    <option value="catch_22">Catch-22</option>
-                    <option value="creativity_inc">Creativity Inc.</option>
-                    <option value="crime_and_punishment">Crime and Punishment</option>
-                    <option value="da_vinci_and_the_40_answers">Da Vinci & the 40 Answers</option>
-                    <option value="denial_of_death">Denial of Death</option>
-                    <option value="dispatches">Dispatches</option>
-                    <option value="divine_comedy">Divine Comedy</option>
-                    <option value="elon_musk">Elon Musk</option>
-                    <option value="fahrenheit_451">Fahrenheit 451</option>
-                    <option value="ghost_wars">Ghost Wars</option>
-                    <option value="good_to_great">Good to Great</option>
-                    <option value="guns_germs_and_steel">Guns, Germs and Steel</option>
-                    <option value="how_i_braved_anu_aunty">How I Braved Anu Aunty & Co-Founded a Million Dollar Company</option>
-                    <option value="howard_hughes">Howard Hughes</option>
-                    <option value="invent_and_wander">Invent & Wander</option>
-                    <option value="isis_inside_the_army_of_terror">ISIS: Inside the Army of Terror</option>
-                    <option value="kingdom_of_the_unjust">Kingdom of the Unjust</option>
-                    <option value="leonardo_da_vinci">Leonardo da Vinci</option>
-                    <option value="man_s_search_for_meaning">Man’s Search for Meaning</option>
-                    <option value="metamorphosis">Metamorphosis</option>
-                    <option value="midnight_in_the_garden_of_good_and_evil">Midnight in the Garden of Good and Evil</option>
-                    <option value="moby_dick">Moby Dick</option>
-                    <option value="mossad">Mossad</option>
-                    <option value="nonzero">Nonzero</option>
-                    <option value="notes_from_underground">Notes from Underground</option>
-                    <option value="one_hundred_years_of_solitude">One Hundred Years of Solitude</option>
-                    <option value="our_final_invention">Our Final Invention</option>
-                    <option value="pale_blue_dot">Pale Blue Dot</option>
-                    <option value="permanent_record">Permanent Record</option>
-                    <option value="pride_and_prejudice">Pride and Prejudice</option>
-                    <option value="rich_dad_poor_dad">Rich Dad Poor Dad</option>
-                    <option value="rise_and_kill_first">Rise and Kill First</option>
-                    <option value="samsung_rising">Samsung Rising</option>
-                    <option value="shoe_dog">Shoe Dog</option>
-                    <option value="surely_youre_joking_mr_feynman">Surely You’re Joking, Mr. Feynman</option>
-                    <option value="slaughterhouse_five">Slaughterhouse-Five</option>
-                    <option value="steve_jobs">Steve Jobs</option>
-                    <option value="superintelligence">Superintelligence</option>
-                    <option value="tertium_organum">Tertium Organum</option>
-                    <option value="the_alchemist">The Alchemist</option>
-                    <option value="the_allies">The Allies</option>
-                    <option value="the_argumentative_indian">The Argumentative Indian</option>
-                    <option value="the_assassins_gate">The Assassin’s Gate: America in Iraq</option>
-                    <option value="the_book_thief">The Book Thief</option>
-                    <option value="the_brothers_karamazov">The Brothers Karamazov</option>
-                    <option value="the_catcher_in_the_rye">The Catcher in the Rye</option>
-                    <option value="the_clash_of_civilizations">The Clash of Civilizations and the Remaking of World Order</option>
-                    <option value="the_dragons_of_eden">The Dragons of Eden</option>
-                    <option value="the_end_of_history_and_the_last_man">The End of History and the Last Man</option>
-                    <option value="the_everything_store">The Everything Store: Jeff Bezos and the Age of Amazon</option>
-                    <option value="the_evolution_of_god">The Evolution of God</option>
-                    <option value="the_fourth_age">The Fourth Age</option>
-                    <option value="the_fourth_industrial_revolution">The Fourth Industrial Revolution</option>
-                    <option value="the_four">The Four</option>
-                    <option value="the_god_delusion">The God Delusion</option>
-                    <option value="the_gods_themselves">The Gods Themselves</option>
-                    <option value="the_great_gatsby">The Great Gatsby</option>
-                    <option value="the_great_mother">The Great Mother</option>
-                    <option value="the_great_war_for_civilizations">The Great War for Civilizations</option>
-                    <option value="the_holocaust">The Holocaust</option>
-                    <option value="the_iliad">The Iliad</option>
-                    <option value="the_immortals_of_meluha">The Immortals of Meluha</option>
-                    <option value="the_innovators">The Innovators</option>
-                    <option value="the_kite_runner">The Kite Runner</option>
-                    <option value="the_longest_war">The Longest War</option>
-                    <option value="the_midnight_library">The Midnight Library</option>
-                    <option value="the_moon_is_a_harsh_mistress">The Moon Is a Harsh Mistress</option>
-                    <option value="the_moral_animal">The Moral Animal</option>
-                    <option value="the_oath_of_the_vayuputras">The Oath of the Vayuputras</option>
-                    <option value="the_odyssey">The Odyssey</option>
-                    <option value="the_prize">The Prize: The Epic Quest for Oil, Money, and Power</option>
-                    <option value="the_richest_man_in_babylon">The Richest Man in Babylon</option>
-                    <option value="the_science_of_self_realization">The Science of Self Realization</option>
-                    <option value="the_secret_of_the_nagas">The Secret of the Nagas</option>
-                    <option value="the_subtle_art_of_not_giving_a_f_ck">The Subtle Art of Not Giving a F*ck</option>
-                    <option value="the_top_five_regrets_of_the_dying">The Top Five Regrets of the Dying</option>
-                    <option value="the_trial">The Trial</option>
-                    <option value="the_virtue_of_nationalism">The Virtue of Nationalism</option>
-                    <option value="the_warmth_of_other_suns">The Warmth of Other Suns</option>
-                    <option value="think_and_grow_rich">Think and Grow Rich</option>
-                    <option value="to_kill_a_mockingbird">To Kill a Mockingbird</option>
-                    <option value="ulysses">Ulysses</option>
-                    <option value="war_and_peace">War and Peace</option>
-                    <option value="white_nights">White Nights</option>
-                    <option value="why_nations_fail">Why Nations Fail</option>
-                    <option value="wuthering_heights">Wuthering Heights</option>
-                    <option value="zero_to_one">Zero to One</option>
-                </select>
-            </div>
-<div id="chat-container" class="mt-8 text-left max-w-3xl mx-auto hidden">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-2xl font-serif">Chatting about: <span id="chat-book-title" class="text-bronze"></span></h3>
-                <div id="character-select-container" class="hidden">
-                     <label for="character-select" class="text-sm font-semibold mr-2">Perspective:</label>
-                    <select id="character-select" class="text-sm rounded-md border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
-                </div>
-            </div>
-            <div id="chat-messages" class="bg-white h-96 p-4 rounded-lg shadow-inner overflow-y-auto space-y-4"></div>
-            <form id="chat-form" class="mt-4 flex gap-4">
-                <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-grow px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
-                <button type="submit" id="chat-submit-button" class="bg-maroon text-white font-bold py-3 px-6 rounded-md hover:bg-opacity-90 transition">Send</button>
-            </form>
-        </div>
-    </div>
-</section>
-
-    <section id="community" class="py-20 px-6">
+    <section id="ai-review" class="bg-gray-100 py-20 px-6">
         <div class="container mx-auto text-center">
-            <h2 class="text-4xl font-serif text-maroon mb-6">Why VICA Exists</h2>
-            <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">VICA aims to unite readers, thinkers, and seekers across borders. We believe in the power of words to shift perspectives and shape futures.</p>
+            <h2 class="text-4xl font-serif text-maroon mb-4">Talk to a Book</h2>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Search our library of over 1000 books to begin an interactive conversation with its persona.</p>
+            
+            <div class="max-w-xl mx-auto mb-4 relative">
+                <input id="book-search-input" type="text" placeholder="Search for a book by title..." class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                <div id="search-results-container" class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg z-10 hidden text-left">
+                    </div>
+            </div>
+
+            <div id="chat-container" class="mt-8 text-left max-w-3xl mx-auto hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-2xl font-serif">Chatting about: <span id="chat-book-title" class="text-bronze"></span></h3>
+                </div>
+                <div id="chat-messages" class="bg-white h-96 p-4 rounded-lg shadow-inner overflow-y-auto space-y-4"></div>
+                <form id="chat-form" class="mt-4 flex gap-4">
+                    <input id="chat-input" type="text" placeholder="Ask a question..." class="flex-grow px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                    <button type="submit" id="chat-submit-button" class="bg-maroon text-white font-bold py-3 px-6 rounded-md hover:bg-opacity-90 transition">Send</button>
+                </form>
+            </div>
         </div>
     </section>
-
+    
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto text-center">
             <p>&copy; 2025 VICA. All Rights Reserved.</p>
         </div>
     </footer>
+    
+    <script>
+        // --- Firebase Initialization ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyDHhe4XtqB9clkTgfGUNM8oAtqIqhkJoNo",
+          authDomain: "vicalibrary.firebaseapp.com",
+          projectId: "vicalibrary",
+          storageBucket: "vicalibrary.appspot.com",
+          messagingSenderId: "897733771070",
+          appId: "1:897733771070:web:0a3d7bd67d1c2b4cf1766f"
+        };
+        // --- END OF FIREBASE CONFIG ---
 
- <script src="reviews.js"></script>
-<script>
-    // --- Populating the dropdown from the database ---
-    const bookSelectDropdown = document.getElementById('book-select');
-    const sortedBooks = Object.entries(reviewsDatabase).sort(([,a],[,b]) => a.title.localeCompare(b.title));
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-    for (const [key, book] of sortedBooks) {
-        const option = document.createElement('option');
-        option.value = key;
-        option.textContent = book.title;
-        bookSelectDropdown.appendChild(option);
-    }
+        // --- All Website Logic ---
+        const searchInput = document.getElementById('book-search-input');
+        const resultsContainer = document.getElementById('search-results-container');
+        
+        const chatContainer = document.getElementById('chat-container');
+        const chatBookTitle = document.getElementById('chat-book-title');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatSubmitButton = document.getElementById('chat-submit-button');
+        
+        let currentBook = null;
+        let chatHistory = [];
 
-    // --- ALL CHAT INTERFACE LOGIC ---
-    const chatContainer = document.getElementById('chat-container');
-    const chatBookTitle = document.getElementById('chat-book-title');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatSubmitButton = document.getElementById('chat-submit-button');
-    const characterSelectContainer = document.getElementById('character-select-container');
-    const characterSelect = document.getElementById('character-select');
+        // --- Search Logic ---
+        searchInput.addEventListener('input', async (e) => {
+            const query = e.target.value.trim();
+            if (query.length < 3) {
+                resultsContainer.classList.add('hidden');
+                return;
+            }
 
-    let currentBookTitle = '';
-    let currentCharacter = 'The Book Itself';
-    let chatHistory = [];
+            const capitalizedQuery = query.charAt(0).toUpperCase() + query.slice(1);
+            
+            const booksRef = db.collection('bestsellers');
+            const snapshot = await booksRef
+                .where('title', '>=', capitalizedQuery)
+                .where('title', '<=', capitalizedQuery + '\uf8ff')
+                .limit(5)
+                .get();
 
-    async function apiCall(body) {
-        const response = await fetch('/.netlify/functions/search', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
+            resultsContainer.innerHTML = '';
+            if (snapshot.empty) {
+                resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No results found in the VICA library.</div>';
+            } else {
+                snapshot.forEach(doc => {
+                    const book = doc.data();
+                    const resultEl = document.createElement('div');
+                    resultEl.classList.add('p-3', 'hover:bg-gray-100', 'cursor-pointer', 'border-b');
+                    resultEl.innerHTML = `<p class="font-bold">${book.title}</p><p class="text-sm text-gray-600">${book.author}</p>`;
+                    resultEl.onclick = () => selectBook(book);
+                    resultsContainer.appendChild(resultEl);
+                });
+            }
+            resultsContainer.classList.remove('hidden');
         });
-        if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
-        return response.json();
-    }
 
-    function addMessage(sender, message, isUser = false) {
-        const messageDiv = document.createElement('div');
-        let content;
-        if (isUser) {
-            messageDiv.classList.add('flex', 'justify-end');
-            content = `<div class="p-3 bg-bronze text-white rounded-lg max-w-lg"><p class="text-sm font-bold">You</p><p>${message}</p></div>`;
-        } else {
-             content = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">${sender}</p><p>${message}</p></div>`;
-        }
-        messageDiv.innerHTML = content;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-        return messageDiv;
-    }
-
-    bookSelectDropdown.addEventListener('change', async function() {
-        const selectedBookKey = this.value;
-        if (!selectedBookKey) {
-            chatContainer.classList.add('hidden');
-            return;
-        }
-
-        const book = reviewsDatabase[selectedBookKey];
-        if (book) {
-            currentBookTitle = book.title;
-            chatBookTitle.textContent = currentBookTitle;
+        function selectBook(book) {
+            currentBook = book;
+            searchInput.value = ''; 
+            resultsContainer.classList.add('hidden');
+            
+            chatBookTitle.textContent = currentBook.title;
             chatHistory = [];
-            characterSelectContainer.classList.add('hidden');
-            chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBookTitle}"...</p></div>`;
+            chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>Hello! I have deep knowledge of "${currentBook.title}". What would you like to know?</p></div>`;
             chatContainer.classList.remove('hidden');
+            window.scrollTo({ top: chatContainer.offsetTop, behavior: 'smooth' });
+        }
 
-            // Fetch both starters and characters simultaneously
-            const startersPromise = apiCall({ bookTitle: currentBookTitle, question: "GET_GREETING_AND_STARTERS" });
-            const charactersPromise = apiCall({ bookTitle: currentBookTitle, question: "GET_CHARACTERS" });
+        // --- Chat Logic ---
+        async function apiCall(body) {
+            const response = await fetch('/.netlify/functions/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            if (!response.ok) throw new Error('The AI is currently busy. Please try again.');
+            return response.json();
+        }
+
+        function addMessage(sender, message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            let content;
+            if (isUser) {
+                messageDiv.classList.add('flex', 'justify-end');
+                content = `<div class="p-3 bg-bronze text-white rounded-lg max-w-lg"><p class="text-sm font-bold">You</p><p>${message}</p></div>`;
+            } else {
+                 content = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">${sender}</p><p>${message}</p></div>`;
+            }
+            messageDiv.innerHTML = content;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return messageDiv;
+        }
+
+        async function sendMessage(userQuestion) {
+             if (!userQuestion || !currentBook) return;
+
+            addMessage("You", userQuestion, true);
+            chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
+            chatSubmitButton.disabled = true;
+
+            const thinkingDiv = addMessage("AI Mentor", `<span class="italic">Thinking...</span>`);
 
             try {
-                const [startersData, charactersData] = await Promise.all([startersPromise, charactersPromise]);
-
-                // Populate starters
-                let startersHTML = startersData.starters.map(starter => 
-                    `<button class="conversation-starter bg-white border border-bronze text-bronze text-sm font-semibold py-1 px-3 rounded-full hover:bg-bronze hover:text-white transition">${starter}</button>`
-                ).join('');
-                chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${startersData.greeting}</p><div class="mt-3 flex flex-wrap gap-2">${startersHTML}</div></div>`;
-
-                document.querySelectorAll('.conversation-starter').forEach(button => button.addEventListener('click', () => sendMessage(button.textContent)));
-
-                // Populate characters if any
-                if (charactersData && charactersData.length > 0) {
-                    characterSelect.innerHTML = '<option>The Book Itself</option>';
-                    charactersData.forEach(char => {
-                        const option = document.createElement('option');
-                        option.textContent = char;
-                        characterSelect.appendChild(option);
-                    });
-                    characterSelectContainer.classList.remove('hidden');
-                }
+                const data = await apiCall({
+                    bookTitle: currentBook.title,
+                    question: userQuestion,
+                    history: chatHistory.slice(0, -1)
+                });
+                
+                chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
+                thinkingDiv.querySelector('p:last-child').innerHTML = data.answer;
+                
             } catch (error) {
-                 addMessage("Error", error.message);
+                chatHistory.pop(); 
+                thinkingDiv.querySelector('p:last-child').innerHTML = error.message;
+            } finally {
+                chatSubmitButton.disabled = false;
+                chatInput.focus();
             }
         }
-    });
 
-    characterSelect.addEventListener('change', function() {
-        currentCharacter = this.value;
-        chatHistory = []; // Reset history when perspective changes
-        addMessage("System", `You are now speaking with ${currentCharacter}.`, false);
-    });
-
-    async function sendMessage(userQuestion) {
-         if (!userQuestion || !currentBookTitle) return;
-
-        addMessage("You", userQuestion, true);
-        chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
-        chatSubmitButton.disabled = true;
-
-        const thinkingDiv = addMessage(currentCharacter, `<span class="italic">Thinking...</span>`);
-
-        try {
-            const data = await apiCall({
-                bookTitle: currentBookTitle,
-                question: userQuestion,
-                history: chatHistory.slice(0, -1),
-                character: currentCharacter
-            });
-
-            chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
-            thinkingDiv.querySelector('p:last-child').innerHTML = data.answer;
-
-        } catch (error) {
-            chatHistory.pop(); 
-            thinkingDiv.querySelector('p:last-child').innerHTML = error.message;
-            thinkingDiv.querySelector('div').classList.add('bg-red-100', 'border', 'border-red-400', 'text-red-700');
-        } finally {
-            chatSubmitButton.disabled = false;
-            chatInput.focus();
-        }
-    }
-
-    chatForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        sendMessage(chatInput.value.trim());
-        chatInput.value = '';
-    });
-</script>
+        chatForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            sendMessage(chatInput.value.trim());
+            chatInput.value = '';
+        });
+    </script>
 </body>
 </html>
