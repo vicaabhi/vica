@@ -1,7 +1,7 @@
-// This is the updated code for netlify/functions/debate.js
-// It includes safety settings to prevent the AI from blocking our creative prompts.
+// This is the corrected code for netlify/functions/debate.js
+// It fixes the crashing bug by using simple text for the safety settings.
 
-const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require("@google/generative-ai");
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
@@ -13,12 +13,12 @@ exports.handler = async function(event, context) {
     try {
         const { mode, book1Title, book2Title, character1, character2, topic } = JSON.parse(event.body);
         
-        // --- NEW: Add safety settings ---
+        // --- CORRECTED: Use simple strings for safety settings ---
         const safetySettings = [
-            { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
-            { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
-            { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
-            { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH },
+            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" },
         ];
 
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest", safetySettings });
@@ -48,7 +48,7 @@ exports.handler = async function(event, context) {
         }
 
         const result = await model.generateContent(prompt);
-        const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        const text = result.response.text().replace(/```json/g, '').replace(/```g, '').trim();
 
         return {
             statusCode: 200,
