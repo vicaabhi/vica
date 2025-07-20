@@ -46,7 +46,7 @@ exports.handler = async function(event, context) {
         }
 
         const result = await model.generateContent(prompt);
-        const text = result.response.text().replace(/```json/g, '').replace(/```g, '').trim();
+        const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
 
         return {
             statusCode: 200,
