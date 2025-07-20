@@ -584,7 +584,71 @@ const observer = new IntersectionObserver(entries => {
 sections.forEach(section => {
     section.classList.add('fade-in-section');
     observer.observe(section);
-});
+}); // --- NEW: VICA PICKS LOGIC ---
+    const moodSelect = document.getElementById('mood-select');
+    const genreSelect = document.getElementById('genre-select');
+    const thinkerSelect = document.getElementById('thinker-select');
+    const getPicksButton = document.getElementById('get-picks-button');
+    const picksOutput = document.getElementById('picks-output');
+    const allSelects = [moodSelect, genreSelect, thinkerSelect];
+
+    allSelects.forEach(currentSelect => {
+        currentSelect.addEventListener('change', () => {
+            if (currentSelect.value) {
+                // When one dropdown is chosen, reset the others
+                allSelects.forEach(otherSelect => {
+                    if (otherSelect !== currentSelect) {
+                        otherSelect.value = '';
+                    }
+                });
+            }
+        });
+    });
+
+    getPicksButton.addEventListener('click', async () => {
+        let payload = null;
+
+        if (moodSelect.value) {
+            payload = { type: 'mood', value: moodSelect.value };
+        } else if (genreSelect.value) {
+            payload = { type: 'genre', value: genreSelect.value };
+        } else if (thinkerSelect.value) {
+            payload = { type: 'thinker', value: thinkerSelect.value };
+        }
+
+        if (!payload) {
+            alert('Please select an option from one of the dropdowns.');
+            return;
+        }
+
+        picksOutput.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-lg">Curating your personalized picks... The AI is reading.</p></div>';
+        getPicksButton.disabled = true;
+        getPicksButton.textContent = 'Thinking...';
+
+        try {
+            const data = await apiCall(payload, 'recommender');
+            let picksHTML = '<div class="grid grid-cols-1 md:grid-cols-3 gap-6">';
+            
+            data.recommendations.forEach(book => {
+                picksHTML += `
+                    <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                        <h4 class="text-xl font-serif font-bold text-maroon">${book.title}</h4>
+                        <p class="text-sm text-gray-500 mb-4">by ${book.author}</p>
+                        <p class="text-gray-700 flex-grow">"${book.reason}"</p>
+                    </div>
+                `;
+            });
+
+            picksHTML += '</div>';
+            picksOutput.innerHTML = picksHTML;
+
+        } catch (error) {
+            picksOutput.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">${error.message}</p></div>`;
+        } finally {
+            getPicksButton.disabled = false;
+            getPicksButton.textContent = 'Get VICA Picks';
+        }
+    });
     </script>
 </body>
 </html>
