@@ -318,7 +318,12 @@
             }
             resultsContainer.classList.remove('hidden');
         });
-
+//Prevent default form-style behavior on Enter key in search input
+searchInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // prevents scroll-to-top
+  }
+});
         // --- Book Selection and Advanced Chat Initialization ---
         async function selectBook(book) {
             currentBook = book;
