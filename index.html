@@ -36,7 +36,7 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- Home Section -->
     <section id="home" class="h-screen bg-cover bg-center parallax" style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto=format&fit=crop');">
         <div class="h-full flex flex-col justify-center items-center bg-black/50 text-white text-center p-6">
             <h1 class="text-5xl md:text-7xl font-extrabold font-serif mb-4">Ideas. Stories. Change.</h1>
@@ -125,6 +125,69 @@
             </div>
         </div>
     </section>
+    <section id="ai-debate" class="py-20 px-6">
+    <div class="container mx-auto text-center">
+        <h2 class="text-4xl font-serif text-maroon mb-4">VICA Debates</h2>
+        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Create a unique dialogue. Pit two books against each other on a topic, or script a conversation between any two characters from the library.</p>
+        
+        <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl text-left">
+            
+            <div class="mb-6">
+                <label class="font-bold mb-2 block">Choose a Debate Mode:</label>
+                <div class="flex border border-gray-300 rounded-md p-1 bg-gray-100">
+                    <button id="mode-book-vs-book" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold bg-bronze text-white">Book vs. Book</button>
+                    <button id="mode-char-vs-char" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold text-gray-600">Character vs. Character</button>
+                </div>
+            </div>
+
+            <div id="book-debate-controls">
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="book1-select" class="font-semibold mb-2 block">Choose Book 1:</label>
+                        <select id="book1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                    </div>
+                    <div>
+                        <label for="book2-select" class="font-semibold mb-2 block">Choose Book 2:</label>
+                        <select id="book2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                     <label for="debate-topic-input" class="font-semibold mb-2 block">Debate Topic:</label>
+                    <input id="debate-topic-input" type="text" placeholder="e.g., What is the nature of freedom?" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                </div>
+            </div>
+
+            <div id="char-debate-controls" class="hidden">
+                 <div class="grid md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="char-book1-select" class="font-semibold mb-2 block">Character 1's Book:</label>
+                        <select id="char-book1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                         <label for="char1-select" class="font-semibold mt-4 mb-2 block">Character 1:</label>
+                        <select id="char1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                    </div>
+                    <div>
+                        <label for="char-book2-select" class="font-semibold mb-2 block">Character 2's Book:</label>
+                        <select id="char-book2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                         <label for="char2-select" class="font-semibold mt-4 mb-2 block">Character 2:</label>
+                        <select id="char2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                     <label for="scenario-input" class="font-semibold mb-2 block">Scenario / Prompt:</label>
+                    <textarea id="scenario-input" rows="3" placeholder="e.g., Character A confronts Character B about why they were betrayed." class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></textarea>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                <button id="start-debate-button" class="bg-maroon text-white font-bold py-3 px-8 rounded-full hover:bg-opacity-90 transition text-lg">Generate Debate</button>
+            </div>
+
+        </div>
+
+        <div id="debate-output" class="mt-8 text-left max-w-3xl mx-auto">
+            </div>
+    </div>
+</section>
     
     <!-- Vision & Community Section -->
     <section id="community" class="py-20 px-6">
