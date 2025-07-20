@@ -8,6 +8,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="data.js" defer></script>
     <style>
         body { background-color: #FDFBF8; color: #1A1A1A; scroll-behavior: smooth; }
         .font-serif { font-family: 'serif'; }
@@ -57,6 +58,8 @@
             </nav>
         </div>
     </header>
+    <div id="qotd-container" class="bg-maroon text-white text-center p-4 shadow-md">
+    </div>
 
     <!-- Home Section -->
     <section id="home" class="h-screen bg-cover bg-center parallax" style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto=format&fit=crop');">
@@ -662,6 +665,25 @@ sections.forEach(section => {
             getPicksButton.textContent = 'Get VICA Picks';
         }
     });
+            // --- NEW: QUOTE OF THE DAY LOGIC ---
+document.addEventListener('DOMContentLoaded', () => {
+    const quoteContainer = document.getElementById('qotd-container');
+    if (quoteContainer && typeof quotes !== 'undefined' && quotes.length > 0) {
+        const now = new Date();
+        const startOfYear = new Date(now.getFullYear(), 0, 0);
+        const diff = now - startOfYear;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const dayOfYear = Math.floor(diff / oneDay);
+
+        const quoteIndex = dayOfYear % quotes.length;
+        const dailyQuote = quotes[quoteIndex];
+
+        quoteContainer.innerHTML = `
+            <p class="font-serif italic text-lg">"${dailyQuote.quote}"</p>
+            <p class="font-sans text-sm mt-2 opacity-80">- ${dailyQuote.author}</p>
+        `;
+    }
+});
     </script>
 </body>
 </html>
