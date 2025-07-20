@@ -310,7 +310,9 @@
                     const resultEl = document.createElement('div');
                     resultEl.classList.add('p-3', 'hover:bg-gray-100', 'cursor-pointer', 'border-b');
                     resultEl.innerHTML = `<p class="font-bold">${book.title}</p><p class="text-sm text-gray-600">${book.author}</p>`;
-                    resultEl.onclick = () => selectBook(book);
+                    resultEl.addEventListener('click', (event) => {
+    event.preventDefault();
+    selectBook(book);});
                     resultsContainer.appendChild(resultEl);
                 });
             }
