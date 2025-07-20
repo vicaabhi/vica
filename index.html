@@ -153,19 +153,21 @@
         let currentBook = null;
         let chatHistory = [];
 
-       // --- Search Logic (CORRECTED for Case-Insensitive Search) ---
+   // --- Search Logic (Original Case-Sensitive Version) ---
 searchInput.addEventListener('input', async (e) => {
-    const query = e.target.value.trim().toLowerCase(); // Use lowercase for the query
+    const query = e.target.value.trim();
     if (query.length < 3) {
         resultsContainer.classList.add('hidden');
         return;
     }
 
+    // This version requires the first letter to be capitalized to match the database
+    const capitalizedQuery = query.charAt(0).toUpperCase() + query.slice(1);
+
     const booksRef = db.collection('bestsellers');
     const snapshot = await booksRef
-        // Search the correct 'title_lowercase' field in your database
-        .where('title_lowercase', '>=', query)
-        .where('title_lowercase', '<=', query + '\uf8ff')
+        .where('title', '>=', capitalizedQuery)
+        .where('title', '<=', capitalizedQuery + '\uf8ff')
         .limit(5)
         .get();
 
