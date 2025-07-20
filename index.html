@@ -24,34 +24,88 @@
     <header class="bg-cream/80 backdrop-blur-sm sticky top-0 z-50 shadow-md">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="text-3xl font-bold text-maroon font-serif">VICA</a>
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="hover:text-bronze">Home</a>
+                <a href="#about" class="hover:text-bronze">About</a>
+                <a href="#shelf" class="hover:text-bronze">The Shelf</a>
+                <a href="#ai-review" class="hover:text-bronze">AI Insights</a>
+                <a href="#community" class="hover:text-bronze">Community</a>
+            </nav>
         </div>
     </header>
 
-    <section id="home" class="h-screen bg-cover bg-center parallax" style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto=format&fit=crop');">
+    <section id="home" class="h-screen bg-cover bg-center parallax" style="background-image: url('https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?q=80&w=1920&auto-format&fit=crop');">
         <div class="h-full flex flex-col justify-center items-center bg-black/50 text-white text-center p-6">
             <h1 class="text-5xl md:text-7xl font-extrabold font-serif mb-4">Ideas. Stories. Change.</h1>
             <p class="text-xl md:text-2xl font-light">Welcome to VICA – A World of Stories, Reflections, and Revolutionary Ideas.</p>
         </div>
     </section>
     
+    <section id="about" class="py-20 px-6">
+        <div class="container mx-auto grid md:grid-cols-5 gap-12 items-center">
+            <div class="md:col-span-2"><img src="https://placehold.co/400x500/A9714B/FDFBF8?text=Abhishek+Mishra" alt="Abhishek Mishra" class="rounded-lg shadow-2xl w-full border-4 border-bronze"></div>
+            <div class="md:col-span-3">
+                <h2 class="text-4xl font-serif text-maroon mb-6">About VICA</h2>
+                <div class="space-y-6 text-lg text-gray-700">
+                    <p class="italic">"I’m a thinker, writer, and dreamer from India, chronicling the intersection of personal journeys, spirituality, power, and transformation through fiction and essays. VICA is my digital home for powerful ideas and global conversations."</p>
+                    <p class="font-bold text-bronze">- Abhishek Mishra, Founder</p>
+                    <p>"VICA is more than a platform — it's a sanctuary of reflections, storytelling, and intellectual depth. Whether you're here to read a soul-stirring story or uncover insights through AI-powered book reviews, VICA is your guide to navigate ideas that matter."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="shelf" class="bg-cream py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-serif text-maroon text-center mb-12">The Shelf</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-maroon flex items-center justify-center p-4">
+                       <h3 class="text-3xl text-white font-serif text-center">The Name Beneath the Dust</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">The Name Beneath the Dust</h3>
+                        <p class="text-gray-600 mb-4">A gripping tale of identity and discovery.</p>
+                        <a href="https://amzn.in/d/i0xbJxy" target="_blank" class="inline-block bg-maroon text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Buy Now on Amazon</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-bronze flex items-center justify-center p-4">
+                       <h3 class="text-2xl text-white font-serif text-center">My Life Journey</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">My Life Journey</h3>
+                        <p class="text-gray-600 mb-4">A personal account of growth and reflection.</p>
+                        <a href="https://vicaabhi.medium.com/my-life-journey-d7d1b4f8160c" target="_blank" class="inline-block bg-bronze text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Read Now</a>
+                    </div>
+                </div>
+                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group transform hover:-translate-y-2 transition-transform duration-300">
+                    <div class="w-full h-80 bg-maroon flex items-center justify-center p-4">
+                       <h3 class="text-2xl text-white font-serif text-center">Evolution of God</h3>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Evolution of God</h3>
+                        <p class="text-gray-600 mb-4">A deep dive into the concept of divinity.</p>
+                        <a href="https://vicaabhi.medium.com/evolution-of-god-b6e013cdba59" target="_blank" class="inline-block bg-bronze text-white px-6 py-2 rounded-full font-semibold hover:bg-opacity-90 transition">Read Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="ai-review" class="bg-gray-100 py-20 px-6">
         <div class="container mx-auto text-center">
             <h2 class="text-4xl font-serif text-maroon mb-4">Talk to a Book</h2>
-            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Search our library to begin an interactive conversation with a book's persona or even its characters.</p>
+            <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Search our library of over 1000 books to begin an interactive conversation with its persona.</p>
             
             <div class="max-w-xl mx-auto mb-4 relative">
                 <input id="book-search-input" type="text" placeholder="Search for a book by title..." class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
-                <div id="search-results-container" class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg z-10 hidden text-left">
-                    </div>
+                <div id="search-results-container" class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 shadow-lg z-10 hidden text-left"></div>
             </div>
 
             <div id="chat-container" class="mt-8 text-left max-w-3xl mx-auto hidden">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-2xl font-serif">Chatting about: <span id="chat-book-title" class="text-bronze"></span></h3>
-                    <div id="character-select-container" class="hidden">
-                         <label for="character-select" class="text-sm font-semibold mr-2">Perspective:</label>
-                        <select id="character-select" class="text-sm rounded-md border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
-                    </div>
                 </div>
                 <div id="chat-messages" class="bg-white h-96 p-4 rounded-lg shadow-inner overflow-y-auto space-y-4"></div>
                 <form id="chat-form" class="mt-4 flex gap-4">
@@ -62,6 +116,13 @@
         </div>
     </section>
     
+    <section id="community" class="py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-serif text-maroon mb-6">Why VICA Exists</h2>
+            <p class="text-xl text-gray-700 max-w-3xl mx-auto mb-10">VICA aims to unite readers, thinkers, and seekers across borders. We believe in the power of words to shift perspectives and shape futures.</p>
+        </div>
+    </section>
+
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto text-center">
             <p>&copy; 2025 VICA. All Rights Reserved.</p>
@@ -69,7 +130,6 @@
     </footer>
     
     <script>
-        // --- Firebase Initialization ---
         const firebaseConfig = {
           apiKey: "AIzaSyDHhe4XtqB9clkTgfGUNM8oAtqIqhkJoNo",
           authDomain: "vicalibrary.firebaseapp.com",
@@ -78,12 +138,9 @@
           messagingSenderId: "897733771070",
           appId: "1:897733771070:web:0a3d7bd67d1c2b4cf1766f"
         };
-        // --- END OF FIREBASE CONFIG ---
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        // --- All Website Logic ---
         const searchInput = document.getElementById('book-search-input');
         const resultsContainer = document.getElementById('search-results-container');
         const chatContainer = document.getElementById('chat-container');
@@ -92,26 +149,21 @@
         const chatForm = document.getElementById('chat-form');
         const chatInput = document.getElementById('chat-input');
         const chatSubmitButton = document.getElementById('chat-submit-button');
-        const characterSelectContainer = document.getElementById('character-select-container');
-        const characterSelect = document.getElementById('character-select');
         
         let currentBook = null;
-        let currentCharacter = 'The Book Itself';
         let chatHistory = [];
 
-        // --- Search Logic ---
         searchInput.addEventListener('input', async (e) => {
-            const query = e.target.value.trim();
+            const query = e.target.value.trim().toLowerCase();
             if (query.length < 3) {
                 resultsContainer.classList.add('hidden');
                 return;
             }
-            const capitalizedQuery = query.charAt(0).toUpperCase() + query.slice(1);
             const booksRef = db.collection('bestsellers');
-            const snapshot = await booksRef.where('title', '>=', capitalizedQuery).where('title', '<=', capitalizedQuery + '\uf8ff').limit(5).get();
+            const snapshot = await booksRef.where('title_lowercase', '>=', query).where('title_lowercase', '<=', query + '\uf8ff').limit(5).get();
             resultsContainer.innerHTML = '';
             if (snapshot.empty) {
-                resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No results found.</div>';
+                resultsContainer.innerHTML = '<div class="p-3 text-gray-500">No results found in the VICA library.</div>';
             } else {
                 snapshot.forEach(doc => {
                     const book = doc.data();
@@ -125,48 +177,16 @@
             resultsContainer.classList.remove('hidden');
         });
 
-        // --- Book Selection and Chat Initialization ---
-        async function selectBook(book) {
+        function selectBook(book) {
             currentBook = book;
             searchInput.value = ''; 
             resultsContainer.classList.add('hidden');
-            
             chatBookTitle.textContent = currentBook.title;
             chatHistory = [];
-            characterSelectContainer.classList.add('hidden');
+            chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>Hello! I have deep knowledge of "${currentBook.title}". What would you like to know?</p></div>`;
             chatContainer.classList.remove('hidden');
-            chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="italic">Initializing AI Mentor for "${currentBook.title}"...</p></div>`;
             window.scrollTo({ top: chatContainer.offsetTop, behavior: 'smooth' });
-
-            const startersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_GREETING_AND_STARTERS" });
-            const charactersPromise = apiCall({ bookTitle: currentBook.title, question: "GET_CHARACTERS" });
-
-            try {
-                const [startersData, charactersData] = await Promise.all([startersPromise, charactersPromise]);
-                let startersHTML = startersData.starters.map(starter => `<button class="conversation-starter bg-white border border-bronze text-bronze text-sm font-semibold py-1 px-3 rounded-full hover:bg-bronze hover:text-white transition">${starter}</button>`).join('');
-                chatMessages.innerHTML = `<div class="p-3 bg-cream rounded-lg max-w-lg"><p class="text-sm font-bold text-maroon">AI Mentor</p><p>${startersData.greeting}</p><div class="mt-3 flex flex-wrap gap-2">${startersHTML}</div></div>`;
-                document.querySelectorAll('.conversation-starter').forEach(button => button.addEventListener('click', () => sendMessage(button.textContent)));
-
-                if (charactersData && charactersData.length > 0) {
-                    characterSelect.innerHTML = '<option>The Book Itself</option>';
-                    charactersData.forEach(char => {
-                        const option = document.createElement('option');
-                        option.textContent = char;
-                        characterSelect.appendChild(option);
-                    });
-                    characterSelectContainer.classList.remove('hidden');
-                }
-            } catch (error) {
-                 addMessage("Error", error.message);
-            }
         }
-        
-        // --- Chat Logic ---
-        characterSelect.addEventListener('change', function() {
-            currentCharacter = this.value;
-            chatHistory = [];
-            addMessage("System", `You are now speaking with ${currentCharacter}.`, false);
-        });
 
         async function apiCall(body) {
             const response = await fetch('/.netlify/functions/search', {
@@ -198,13 +218,12 @@
             addMessage("You", userQuestion, true);
             chatHistory.push({ role: "user", parts: [{ text: userQuestion }] });
             chatSubmitButton.disabled = true;
-            const thinkingDiv = addMessage(currentCharacter, `<span class="italic">Thinking...</span>`);
+            const thinkingDiv = addMessage("AI Mentor", `<span class="italic">Thinking...</span>`);
             try {
                 const data = await apiCall({
                     bookTitle: currentBook.title,
                     question: userQuestion,
-                    history: chatHistory.slice(0, -1),
-                    character: currentCharacter
+                    history: chatHistory.slice(0, -1)
                 });
                 chatHistory.push({ role: "model", parts: [{ text: data.answer }] });
                 thinkingDiv.querySelector('p:last-child').innerHTML = data.answer;
