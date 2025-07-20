@@ -1,5 +1,4 @@
-// This is the corrected code for netlify/functions/debate.js
-// It fixes the crashing bug by using simple text for the safety settings.
+// This is the correct and final version of netlify/functions/debate.js
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -13,7 +12,6 @@ exports.handler = async function(event, context) {
     try {
         const { mode, book1Title, book2Title, character1, character2, topic } = JSON.parse(event.body);
         
-        // --- CORRECTED: Use simple strings for safety settings ---
         const safetySettings = [
             { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
             { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
