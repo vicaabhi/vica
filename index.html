@@ -125,16 +125,16 @@
             </div>
         </div>
     </section>
-    <section id="ai-debate" class="py-20 px-6">
+    <section id="ai-debate" class="bg-white py-20 px-6">
     <div class="container mx-auto text-center">
         <h2 class="text-4xl font-serif text-maroon mb-4">VICA Debates</h2>
-        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Create a unique dialogue. Pit two books against each other on a topic, or script a conversation between any two characters from the library.</p>
-        
-        <div class="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-xl text-left">
-            
+        <p class="text-lg text-gray-700 mb-8 max-w-2xl mx-auto">Create a unique dialogue. Pit two books against each other on a topic, or script a conversation between any two characters.</p>
+
+        <div class="max-w-3xl mx-auto bg-cream p-8 rounded-lg shadow-xl text-left">
+
             <div class="mb-6">
                 <label class="font-bold mb-2 block">Choose a Debate Mode:</label>
-                <div class="flex border border-gray-300 rounded-md p-1 bg-gray-100">
+                <div class="flex border border-gray-300 rounded-md p-1 bg-gray-200">
                     <button id="mode-book-vs-book" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold bg-bronze text-white">Book vs. Book</button>
                     <button id="mode-char-vs-char" class="flex-1 py-2 px-4 rounded-md text-sm font-semibold text-gray-600">Character vs. Character</button>
                 </div>
@@ -143,49 +143,47 @@
             <div id="book-debate-controls">
                 <div class="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label for="book1-select" class="font-semibold mb-2 block">Choose Book 1:</label>
-                        <select id="book1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                        <label for="book1-input" class="font-semibold mb-2 block">Book 1 Title:</label>
+                        <input id="book1-input" type="text" placeholder="e.g., 1984" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
                     </div>
                     <div>
-                        <label for="book2-select" class="font-semibold mb-2 block">Choose Book 2:</label>
-                        <select id="book2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                        <label for="book2-input" class="font-semibold mb-2 block">Book 2 Title:</label>
+                        <input id="book2-input" type="text" placeholder="e.g., Brave New World" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
                     </div>
                 </div>
                 <div class="mb-6">
-                     <label for="debate-topic-input" class="font-semibold mb-2 block">Debate Topic:</label>
-                    <input id="debate-topic-input" type="text" placeholder="e.g., What is the nature of freedom?" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition">
+                    <label for="debate-topic-input" class="font-semibold mb-2 block">Debate Topic:</label>
+                    <input id="debate-topic-input" type="text" placeholder="e.g., What is the best way to control a population?" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
                 </div>
             </div>
 
             <div id="char-debate-controls" class="hidden">
-                 <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div class="grid md:grid-cols-2 gap-6 mb-6">
                     <div>
-                        <label for="char-book1-select" class="font-semibold mb-2 block">Character 1's Book:</label>
-                        <select id="char-book1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
-                         <label for="char1-select" class="font-semibold mt-4 mb-2 block">Character 1:</label>
-                        <select id="char1-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                        <label for="char1-input" class="font-semibold mb-2 block">Character 1:</label>
+                        <input id="char1-input" type="text" placeholder="e.g., Jay Gatsby" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
+                        <label for="char-book1-input" class="font-semibold mt-4 mb-2 block">Character 1's Book:</label>
+                        <input id="char-book1-input" type="text" placeholder="e.g., The Great Gatsby" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
                     </div>
                     <div>
-                        <label for="char-book2-select" class="font-semibold mb-2 block">Character 2's Book:</label>
-                        <select id="char-book2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
-                         <label for="char2-select" class="font-semibold mt-4 mb-2 block">Character 2:</label>
-                        <select id="char2-select" class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></select>
+                        <label for="char2-input" class="font-semibold mb-2 block">Character 2:</label>
+                        <input id="char2-input" type="text" placeholder="e.g., Holden Caulfield" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
+                        <label for="char-book2-input" class="font-semibold mt-4 mb-2 block">Character 2's Book:</label>
+                        <input id="char-book2-input" type="text" placeholder="e.g., The Catcher in the Rye" class="w-full px-4 py-3 rounded-md border-2 border-gray-300">
                     </div>
                 </div>
                 <div class="mb-6">
-                     <label for="scenario-input" class="font-semibold mb-2 block">Scenario / Prompt:</label>
-                    <textarea id="scenario-input" rows="3" placeholder="e.g., Character A confronts Character B about why they were betrayed." class="w-full px-4 py-3 rounded-md border-2 border-gray-300 focus:ring-2 focus:ring-bronze focus:border-bronze transition"></textarea>
+                    <label for="scenario-input" class="font-semibold mb-2 block">Scenario / Prompt:</label>
+                    <textarea id="scenario-input" rows="3" placeholder="e.g., Character A confronts Character B about a betrayal." class="w-full px-4 py-3 rounded-md border-2 border-gray-300"></textarea>
                 </div>
             </div>
-            
-            <div class="text-center mt-8">
-                <button id="start-debate-button" class="bg-maroon text-white font-bold py-3 px-8 rounded-full hover:bg-opacity-90 transition text-lg">Generate Debate</button>
-            </div>
 
+            <div class="text-center mt-8">
+                <button id="start-debate-button" class="bg-maroon text-white font-bold py-3 px-8 rounded-full hover:bg-opacity-90 transition text-lg">Generate</button>
+            </div>
         </div>
 
-        <div id="debate-output" class="mt-8 text-left max-w-3xl mx-auto">
-            </div>
+        <div id="debate-output" class="mt-8 text-left max-w-3xl mx-auto"></div>
     </div>
 </section>
     
@@ -363,6 +361,69 @@
             sendMessage(chatInput.value.trim());
             chatInput.value = '';
         });
-    </script>
+   // --- NEW: VICA DEBATES LOGIC ---
+const modeBookVsBook = document.getElementById('mode-book-vs-book');
+const modeCharVsChar = document.getElementById('mode-char-vs-char');
+const bookDebateControls = document.getElementById('book-debate-controls');
+const charDebateControls = document.getElementById('char-debate-controls');
+const startDebateButton = document.getElementById('start-debate-button');
+const debateOutput = document.getElementById('debate-output');
+let currentDebateMode = 'book';
+
+modeBookVsBook.addEventListener('click', () => {
+    currentDebateMode = 'book';
+    bookDebateControls.classList.remove('hidden');
+    charDebateControls.classList.add('hidden');
+    modeBookVsBook.classList.add('bg-bronze', 'text-white');
+    modeCharVsChar.classList.remove('bg-bronze', 'text-white');
+});
+
+modeCharVsChar.addEventListener('click', () => {
+    currentDebateMode = 'character';
+    charDebateControls.classList.remove('hidden');
+    bookDebateControls.classList.add('hidden');
+    modeCharVsChar.classList.add('bg-bronze', 'text-white');
+    modeBookVsBook.classList.remove('bg-bronze', 'text-white');
+});
+
+startDebateButton.addEventListener('click', async () => {
+    let payload = { mode: currentDebateMode };
+
+    if (currentDebateMode === 'book') {
+        payload.book1Title = document.getElementById('book1-input').value;
+        payload.book2Title = document.getElementById('book2-input').value;
+        payload.topic = document.getElementById('debate-topic-input').value;
+    } else {
+        payload.character1 = document.getElementById('char1-input').value;
+        payload.book1Title = document.getElementById('char-book1-input').value;
+        payload.character2 = document.getElementById('char2-input').value;
+        payload.book2Title = document.getElementById('char-book2-input').value;
+        payload.topic = document.getElementById('scenario-input').value;
+    }
+
+    if (!payload.book1Title || !payload.book2Title || !payload.topic) {
+        alert('Please fill in all fields.');
+        return;
+    }
+
+    debateOutput.innerHTML = '<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-lg">Generating debate... The AI is thinking deeply.</p></div>';
+    startDebateButton.disabled = true;
+    startDebateButton.textContent = 'Generating...';
+
+    try {
+        const data = await apiCall(payload, 'debate');
+        let debateHTML = '<div class="bg-white p-8 rounded-lg shadow-lg space-y-4">';
+        data.debate.forEach(turn => {
+            debateHTML += `<div><p class="font-bold text-maroon">${turn.speaker}:</p><p class="pl-4">${turn.dialogue}</p></div>`;
+        });
+        debateHTML += '</div>';
+        debateOutput.innerHTML = debateHTML;
+    } catch (error) {
+        debateOutput.innerHTML = `<div class="bg-white p-8 rounded-lg shadow-lg"><p class="text-center text-red-500">${error.message}</p></div>`;
+    } finally {
+        startDebateButton.disabled = false;
+        startDebateButton.textContent = 'Generate';
+    }
+}); </script>
 </body>
 </html>
