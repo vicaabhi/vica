@@ -1,32 +1,38 @@
-const fetch = require("node-fetch");
+// Code for netlify/functions/gpt.js
+const { OpenAI } = require("openai");
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 exports.handler = async function(event, context) {
-  try {
-    const body = JSON.parse(event.body);
+    if (event.httpMethod !== 'POST') {
+        return { statusCode: 405, body: 'Method Not Allowed' };
+    }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [{ role: "user", content: body.prompt }]
-      })
-    });
+    try {
+        const { bookTitle } = JSON.parse(event.body);
 
-    const data = await response.json();
+        const completion = await openai.chat.completions.create({
+            messages: [{
+                role: "system",
+                content: "You are a concise literary summarization expert."
+            }, {
+                role: "user",
+                content: `Provide a detailed, insightful, one-paragraph summary for the book "${bookTitle}".`
+            }],
+            model: "gpt-3.5-turbo",
+        });
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ response: data.choices[0].message.content })
-    };
+        const summary = completion.choices[0].message.content;
 
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err.message })
-    };
-  }
+        return {
+            statusCode: 200,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ summary: summary }),
+        };
+    } catch (error) {
+        console.error("Error with OpenAI function:", error);
+        return { statusCode: 500, body: JSON.stringify({ error: "Failed to get GPT summary." }) };
+    }
 };
