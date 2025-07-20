@@ -226,6 +226,35 @@
             sendMessage(chatInput.value.trim());
             chatInput.value = '';
         });
-    </script>
+   // --- NEW GPT SUMMARY LOGIC ---
+document.getElementById('gpt-summary-button').addEventListener('click', async () => {
+    if (!currentBook) return;
+
+    const gptButton = document.getElementById('gpt-summary-button');
+    gptButton.disabled = true;
+    gptButton.textContent = "Getting Summary...";
+
+    const gptSummaryDiv = document.createElement('div');
+    chatMessages.appendChild(gptSummaryDiv);
+
+    try {
+        const response = await fetch('/.netlify/functions/gpt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookTitle: currentBook.title })
+        });
+        if (!response.ok) throw new Error();
+
+        const data = await response.json();
+        gptSummaryDiv.innerHTML = `<div class="p-3 bg-gray-200 rounded-lg max-w-lg"><p class="text-sm font-bold text-gray-800">GPT-Powered Summary</p><p>${data.summary}</p></div>`;
+
+    } catch (error) {
+        gptSummaryDiv.innerHTML = `<div class="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg max-w-lg"><p class="text-sm font-bold">Error</p><p>Failed to get GPT summary.</p></div>`;
+    } finally {
+        gptButton.disabled = false;
+        gptButton.textContent = "Get GPT Summary";
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+}); </script>
 </body>
 </html>
