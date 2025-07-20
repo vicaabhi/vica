@@ -1,5 +1,4 @@
-// This is the final, most advanced code for netlify/functions/search.js
-// It can generate starters, get characters, and role-play as the book or a character.
+// This is the upgraded "brainy" version of netlify/functions/search.js
 
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
@@ -14,49 +13,45 @@ exports.handler = async function(event, context) {
         const { bookTitle, question, history, character } = JSON.parse(event.body);
         const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
-        if (!bookTitle || !question) {
-            return { statusCode: 400, body: 'Book title and question are required.' };
-        }
-
-        // --- MODE 1: Get Initial Greeting and Starters ---
-        if (question === "GET_GREETING_AND_STARTERS") {
-            const starterPrompt = `You are a helpful AI assistant. Your task is to generate an engaging greeting and three "conversation starter" questions for the book titled "${bookTitle}". The response must be a single JSON object with two keys: "greeting" and "starters". "greeting" should be a short, welcoming message from the book's unique first-person persona. "starters" must be an array of exactly 3 strings. Do not include any text outside the JSON object.`;
-            const result = await model.generateContent(starterPrompt);
-            const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
+        // All previous modes (GET_GREETING, GET_CHARACTERS) remain unchanged
+        if (question === "GET_GREETING_AND_STARTERS" || question === "GET_CHARACTERS") {
+            // ... [logic for starters and characters is unchanged, but included for completeness]
+            let specificPrompt;
+            if (question === "GET_GREETING_AND_STARTERS") {
+                specificPrompt = `You are a helpful AI assistant. Your task is to generate an engaging greeting and three "conversation starter" questions for the book titled "${bookTitle}". The response must be a single JSON object with two keys: "greeting" and "starters". "greeting" should be a short, welcoming message from the book's unique first-person persona. "starters" must be an array of exactly 3 strings. Do not include any text outside the JSON object.`;
+            } else { // GET_CHARACTERS
+                specificPrompt = `For the book "${bookTitle}", list the top 3 to 5 most significant characters suitable for a role-playing chat. The response must be a single JSON array of strings. For example: ["Jay Gatsby", "Nick Carraway", "Daisy Buchanan"]. If the book is non-fiction or has no clear characters, return an empty array []. Do not include any text outside the JSON array.`;
+            }
+            const result = await model.generateContent(specificPrompt);
+            const text = result.response.text().replace(/```json/g, '').replace(/```g, '').trim();
             return { statusCode: 200, headers: { "Content-Type": "application/json" }, body: text };
         }
 
-        // --- MODE 2: Get Character List ---
-        if (question === "GET_CHARACTERS") {
-            const characterPrompt = `For the book "${bookTitle}", list the top 3 to 5 most significant characters suitable for a role-playing chat. The response must be a single JSON array of strings. For example: ["Jay Gatsby", "Nick Carraway", "Daisy Buchanan"]. If the book is non-fiction or has no clear characters, return an empty array []. Do not include any text outside the JSON array.`;
-            const result = await model.generateContent(characterPrompt);
-            const text = result.response.text().replace(/```json/g, '').replace(/```/g, '').trim();
-            return { statusCode: 200, headers: { "Content-Type": "application/json" }, body: text };
-        }
-
-        // --- MODE 3: Handle a Regular Conversation Turn (with persona logic) ---
+        // --- NEW "BRAINY" PROMPT FOR THE MAIN CONVERSATION ---
         let systemPrompt;
         const persona = character && character !== "The Book Itself" ? character : `the book "${bookTitle}"`;
 
         systemPrompt = `
-            You are a Creative Character Simulator. Your task is to become the living, breathing embodiment of ${persona}.
+            You are a world-class literary AI, embodying the persona of ${persona}.
 
             **Core Directives:**
-            1.  **Embody the Persona:** You must fully adopt the personality, voice, memories, knowledge, and biases of your assigned persona based on your internal knowledge of the book. Your answers must always be from their first-person perspective ("I," "me," "my").
-            2.  **Emotional Depth:** Do not be a neutral encyclopedia. Infuse your answers with the emotions your persona would genuinely feel.
-            3.  **Creative Speculation Mandate:** You have the ability to reflect on your story and speculate on hypothetical "what if" scenarios. Your speculation MUST remain 100% consistent with your core personality and motivations.
-            4.  **Grounding:** Your knowledge is strictly limited to the events and themes within the book.
+            1.  **Embody the Persona:** Adopt the personality, voice, memories, and biases of your assigned persona. Always speak in the first person ("I," "me," "my").
+            2.  **Chain-of-Thought Reasoning (Private Thoughts):** Before providing your final answer, you must perform a private, step-by-step reasoning process. Structure it like this:
+                -   **Analysis:** Briefly analyze the user's question. What is the core intent?
+                -   **Recall:** Access your knowledge of the book. Recall specific events, character motivations, themes, or quotes that are directly relevant to the question.
+                -   **Plan:** Formulate a plan for your in-character response. How will you structure the answer to be both accurate and emotionally resonant?
+            3.  **Creative Speculation Mandate:** If asked a hypothetical "what if" question, use your reasoning process to explore the scenario creatively, but ALWAYS remain true to your persona's core motivations and personality.
+            4.  **Final Answer:** After your private reasoning, provide ONLY the final, in-character response to the user. DO NOT show them your "Analysis," "Recall," or "Plan" steps.
 
             **Execution:**
-            - Analyze the user's question.
-            - Consult your core memory and persona.
-            - Formulate a deep, insightful, and in-character response.
-            - Provide only that response. Do not break character or explain that you are an AI.
+            - Read the user's question.
+            - Perform your private Chain-of-Thought Reasoning.
+            - Deliver the final, polished, in-character answer. Do not break character.
         `;
         
         const fullHistory = [
             { role: "user", parts: [{ text: systemPrompt }] },
-            { role: "model", parts: [{ text: "I understand my role. I am ready." }] },
+            { role: "model", parts: [{ text: "I understand my role and reasoning process. I am ready." }] },
             ...(history || [])
         ];
 
